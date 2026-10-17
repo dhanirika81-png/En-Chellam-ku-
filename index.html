@@ -3,7 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f8c4e8">
 <title>Cupid's Quest 💝</title>
 
 <style>
@@ -14,7 +15,12 @@
   --ink: #823d91;
   --cream: #fff1fb;
 }
-* { box-sizing: border-box; }
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 html, body {
   margin: 0;
   width: 100%;
@@ -23,7 +29,11 @@ html, body {
   background: #a99af8;
   color: var(--ink);
 }
-body { overflow: hidden; }
+
+body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
 
 button {
   font: inherit;
@@ -35,9 +45,22 @@ button {
   padding: .8rem 1.25rem;
   box-shadow: 0 5px 0 #d86db4, 0 0 22px #fff8;
   transition: transform .18s, filter .18s;
+  touch-action: manipulation;
 }
-button:hover { transform: translateY(-2px); filter: brightness(1.04); }
-button:active { transform: translateY(2px); }
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+}
+
+button:active {
+  transform: translateY(2px);
+}
+
+button:focus-visible {
+  outline: 3px solid #9b5be0;
+  outline-offset: 4px;
+}
 
 .screen {
   position: fixed;
@@ -46,9 +69,17 @@ button:active { transform: translateY(2px); }
   align-items: center;
   justify-content: center;
   text-align: center;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: max(12px, env(safe-area-inset-top))
+           12px
+           max(12px, env(safe-area-inset-bottom));
 }
-.screen.active { display: flex; }
+
+.screen.active {
+  display: flex;
+}
 
 .art {
   position: absolute;
@@ -60,32 +91,55 @@ button:active { transform: translateY(2px); }
   user-select: none;
   pointer-events: none;
 }
+
 .shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg,#5e42a51a,#ffb1df16 65%,#4a2e6c20);
+  background: linear-gradient(
+    180deg,
+    #5e42a51a,
+    #ffb1df16 65%,
+    #4a2e6c20
+  );
   pointer-events: none;
 }
+
 .panel {
   position: relative;
   z-index: 2;
   width: min(90vw, 660px);
+  margin: auto;
   padding: clamp(1rem, 4vw, 2.2rem);
   border: 3px solid #ffe4fa;
   border-radius: 28px;
-  background: #fff0f7df;
+  background: #fff0f7e8;
   box-shadow: 0 0 0 5px #d88ddc8a, 0 0 40px #ffdbf7b8;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 }
-h1, h2, p { margin-top: 0; }
+
+h1, h2, p {
+  margin-top: 0;
+}
+
 h1 {
   font-size: clamp(2rem, 6vw, 4rem);
   line-height: 1.05;
   text-shadow: 2px 3px #ffd3ef, 0 0 16px white;
 }
-h2 { font-size: clamp(1.5rem, 4.5vw, 2.5rem); }
-p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
-.small { font-size: .92rem; }
+
+h2 {
+  font-size: clamp(1.5rem, 4.5vw, 2.5rem);
+}
+
+p {
+  font-size: clamp(1rem, 2.7vw, 1.25rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.small {
+  font-size: .92rem;
+}
 
 .btnrow {
   display: flex;
@@ -94,27 +148,82 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   flex-wrap: wrap;
   margin-top: 1.2rem;
 }
-.ornament { font-size: 1.4rem; letter-spacing: .25rem; margin-bottom: .65rem; }
+
+.ornament {
+  font-size: 1.4rem;
+  letter-spacing: .25rem;
+  margin-bottom: .65rem;
+}
 
 #openingScreen {
   z-index: 6;
   background: radial-gradient(circle at top, #ffe0f4, #c6b0ff 75%);
 }
-#titleScreen { z-index: 1; }
-#previewScreen { z-index: 2; }
-#gameScreen { z-index: 3; background: #b8a3ff; }
-#quizScreen, #wrongScreen, #letterScreen { z-index: 4; }
-#titleScreen .panel, #previewScreen .panel { background: #fff0f7d5; }
 
-#gameScreen { align-items: stretch; justify-content: stretch; }
+#titleScreen {
+  z-index: 1;
+}
+
+#previewScreen {
+  z-index: 2;
+}
+
+#gameScreen {
+  z-index: 3;
+  background: #b8a3ff;
+  padding: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+
+#quizScreen, #wrongScreen, #letterScreen {
+  z-index: 4;
+}
+
+#titleScreen .panel,
+#previewScreen .panel {
+  background: #fff0f7e8;
+}
+
+/* GAME SCENE */
+
+#gameScreen .game-art {
+  position: absolute;
+  inset: -1%;
+  width: 102%;
+  height: 102%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+  transform: scale(1.38);
+  transform-origin: center center;
+  will-change: transform;
+  transition: transform .6s ease;
+}
+
+#gameScreen .shade {
+  background: linear-gradient(
+    180deg,
+    #43205a26 0%,
+    #5d317c05 38%,
+    #3e1a6520 100%
+  );
+}
+
 #gameCanvas {
   position: absolute;
   inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
-  touch-action: manipulation;
+  touch-action: none;
   cursor: pointer;
+  z-index: 2;
+  outline: none;
 }
+
+/* GAME HUD */
+
 .game-hud {
   position: absolute;
   z-index: 5;
@@ -124,6 +233,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 8px;
   padding: 0 14px;
   pointer-events: none;
   font-family: "Trebuchet MS", sans-serif;
@@ -131,57 +241,151 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   color: #fff5ff;
   text-shadow: 2px 2px #c34c9e;
 }
+
 .heartsleft {
   font-size: clamp(1rem, 3vw, 1.6rem);
-  letter-spacing: 2px;
-  max-width: 55vw;
-  white-space: nowrap;
-  overflow: hidden;
+  letter-spacing: 1px;
+  max-width: 56vw;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+  background: #75408c75;
+  border: 1px solid #fff5ff9c;
+  border-radius: 18px;
+  padding: 7px 10px;
+  backdrop-filter: blur(5px);
 }
-.score { font-size: clamp(1.1rem, 3vw, 1.7rem); white-space: nowrap; }
+
+.score {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  white-space: nowrap;
+  background: #75408c75;
+  border: 1px solid #fff5ff9c;
+  border-radius: 18px;
+  padding: 9px 11px;
+  backdrop-filter: blur(5px);
+}
+
+.hud-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  pointer-events: auto;
+}
+
 .pause {
   pointer-events: auto;
   border-radius: 16px;
+  min-width: 46px;
+  min-height: 46px;
   padding: .35rem .7rem;
   box-shadow: 0 3px #d86db4;
   font-size: 1.35rem;
 }
+
 .game-caption {
   position: absolute;
   z-index: 4;
-  bottom: max(8px, env(safe-area-inset-bottom));
+  bottom: max(12px, env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
   max-width: 94vw;
   border: 2px solid #ffd7f1;
-  background: #ffe9f6df;
+  background: #ffe9f6eF;
   border-radius: 28px;
-  padding: .45rem 1.2rem;
+  padding: .55rem 1.2rem;
   color: #a64d9d;
   font-weight: bold;
   box-shadow: 0 0 18px #fff;
+  pointer-events: none;
 }
-.game-caption strong { display: block; font-size: 1.2rem; }
-.game-caption span { font-size: .86rem; }
 
-.zooming { animation: cameraZoom .95s cubic-bezier(.16,.78,.25,1) forwards; }
+.game-caption strong {
+  display: block;
+  font-size: 1.2rem;
+}
+
+.game-caption span {
+  font-size: .86rem;
+}
+
+/* TITLE TO GAME TRANSITION */
+
+.zooming {
+  animation: cameraZoom .95s cubic-bezier(.16,.78,.25,1) forwards;
+}
+
 @keyframes cameraZoom {
-  0% { transform: scale(1); opacity: 1; filter: brightness(1); }
-  65% { opacity: 1; filter: brightness(1.15); }
-  100% { transform: scale(1.75); opacity: 0; filter: brightness(1.3); }
-}
-.game-enter { animation: gameReveal .85s cubic-bezier(.16,.78,.25,1) both; }
-@keyframes gameReveal {
-  0% { transform: scale(.72); opacity: 0; filter: blur(8px); }
-  70% { transform: scale(1.025); opacity: 1; filter: blur(0); }
-  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  65% {
+    opacity: 1;
+    filter: brightness(1.15);
+  }
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+    filter: brightness(1.3);
+  }
 }
 
-.quiz-card { max-height: 88dvh; overflow: auto; }
-.options { display: grid; grid-template-columns: 1fr; gap: .7rem; margin-top: 1rem; }
-.options button { width: 100%; border-radius: 18px; text-align: center; }
-.qnum { font-weight: bold; color: #b44d9e; margin-bottom: .5rem; }
+.game-enter {
+  animation: gameReveal .85s cubic-bezier(.16,.78,.25,1) both;
+}
+
+@keyframes gameReveal {
+  0% {
+    transform: scale(.88);
+    opacity: 0;
+    filter: blur(5px);
+  }
+  70% {
+    transform: scale(1.015);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* QUIZ */
+
+.quiz-card {
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .7rem;
+  margin-top: 1rem;
+}
+
+.options button {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 18px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.qnum {
+  font-weight: bold;
+  color: #b44d9e;
+  margin-bottom: .5rem;
+}
+
+/* WRONG ANSWER */
 
 .wrong {
   background: linear-gradient(135deg, #f83f67, #a20d39);
@@ -189,6 +393,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   flex-direction: column;
   gap: 1.2rem;
 }
+
 .wrong h1 {
   font-family: "Trebuchet MS", sans-serif;
   font-size: clamp(1.8rem, 7vw, 4.3rem);
@@ -197,15 +402,65 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 }
 
 /* LOVE LETTER */
+
 #letterScreen {
-  padding: 12px;
+  padding: max(12px, env(safe-area-inset-top)) 12px
+           max(12px, env(safe-area-inset-bottom));
 }
+
 .letter-panel {
+  width: min(94vw, 720px);
   max-height: 94dvh;
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  padding: clamp(.9rem, 3vw, 1.6rem);
 }
+
+/* Decorative heart border */
+
+.heart-border {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5px, 2vw, 15px);
+  margin: .65rem 0 1rem;
+  padding: 10px 3px;
+  color: #ef58a7;
+  font-size: clamp(1.1rem, 4vw, 1.8rem);
+  text-shadow: 0 2px 8px #ffaddb;
+}
+
+.heart-border::before,
+.heart-border::after {
+  content: "";
+  flex: 1;
+  min-width: 8px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #f08bc8, #ffc7e9);
+  border-radius: 10px;
+}
+
+.heart-border::after {
+  background: linear-gradient(90deg, #ffc7e9, #f08bc8, transparent);
+}
+
+.heart-border .tiny-heart {
+  display: inline-block;
+  animation: heartBob 1.6s ease-in-out infinite;
+}
+
+.heart-border .tiny-heart:nth-child(even) {
+  animation-delay: -.8s;
+}
+
+@keyframes heartBob {
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50% { transform: translateY(-4px) rotate(8deg); }
+}
+
 .letter-paper {
   background: repeating-linear-gradient(
     to bottom,
@@ -221,6 +476,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   box-shadow: 0 0 0 5px #ffe3f7;
   overflow-wrap: anywhere;
 }
+
 .letter-content {
   color: #7e438f;
   font: 1rem/32px Georgia, serif;
@@ -229,24 +485,433 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   margin: 0;
   padding: 0;
 }
-.audio-row { margin-top: 1rem; }
+
+/* FLOATING DECORATED MUSIC PLAYER */
+
+.audio-card {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  margin: 2rem .2rem 1rem;
+  padding: 1.35rem 1rem 1rem;
+  border: 2px solid #ffc4e7;
+  border-radius: 27px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #ffffff 0%, transparent 55%),
+    linear-gradient(145deg, #fffaff 0%, #ffe1f3 48%, #f0e2ff 100%);
+  box-shadow:
+    0 7px 0 #e8a0d0,
+    0 12px 22px #d77fc955,
+    0 0 25px #ffbfe9aa,
+    inset 0 0 0 4px #fff8ff;
+  animation:
+    playerFloat 3.6s ease-in-out infinite,
+    playerGlow 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.audio-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px dashed #f1a5d5;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.audio-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    transparent,
+    #ffffffa8,
+    transparent
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+  z-index: 0;
+  animation: playerShine 6s ease-in-out infinite;
+}
+
+@keyframes playerFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-.4deg);
+  }
+  50% {
+    transform: translateY(-9px) rotate(.4deg);
+  }
+}
+
+@keyframes playerGlow {
+  0%, 100% {
+    box-shadow:
+      0 7px 0 #e8a0d0,
+      0 12px 22px #d77fc955,
+      0 0 22px #ffbfe988,
+      inset 0 0 0 4px #fff8ff;
+  }
+  50% {
+    box-shadow:
+      0 7px 0 #e8a0d0,
+      0 15px 30px #d77fc977,
+      0 0 35px #ffbfe9dd,
+      inset 0 0 0 4px #fff8ff;
+  }
+}
+
+@keyframes playerShine {
+  0%, 65% {
+    left: -80%;
+    opacity: 0;
+  }
+  72% {
+    opacity: .8;
+  }
+  90%, 100% {
+    left: 140%;
+    opacity: 0;
+  }
+}
+
+/* Pink bow attached to the top edge */
+
+.audio-ribbon {
+  position: absolute;
+  z-index: 4;
+  top: -20px;
+  right: 19px;
+  width: 58px;
+  height: 32px;
+  pointer-events: none;
+  filter: drop-shadow(0 3px 2px #cc65a966);
+  animation: ribbonBob 2.2s ease-in-out infinite;
+}
+
+.audio-ribbon::before,
+.audio-ribbon::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  width: 25px;
+  height: 22px;
+  background: linear-gradient(145deg, #ffb6df, #ed69b4);
+  border: 1px solid #ffe6f6;
+}
+
+.audio-ribbon::before {
+  left: 1px;
+  border-radius: 70% 15% 65% 20%;
+  transform: rotate(24deg);
+}
+
+.audio-ribbon::after {
+  right: 1px;
+  border-radius: 15% 70% 20% 65%;
+  transform: rotate(-24deg);
+}
+
+.ribbon-knot {
+  position: absolute;
+  z-index: 2;
+  left: 22px;
+  top: 8px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffeffa, #f06bb7);
+  border: 2px solid #fff3fb;
+}
+
+@keyframes ribbonBob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-4px) rotate(4deg); }
+}
+
+/* Floating hearts */
+
+.float-heart {
+  position: absolute;
+  z-index: 0;
+  bottom: 8px;
+  color: #ef79bb;
+  opacity: 0;
+  pointer-events: none;
+  animation: floatUp 4.8s linear infinite;
+  text-shadow: 0 0 8px #ffaddb;
+}
+
+.float-heart:nth-of-type(1) {
+  left: 7%;
+  font-size: 20px;
+  animation-delay: -1s;
+}
+
+.float-heart:nth-of-type(2) {
+  left: 25%;
+  font-size: 13px;
+  animation-delay: -3.1s;
+}
+
+.float-heart:nth-of-type(3) {
+  right: 24%;
+  font-size: 19px;
+  animation-delay: -2s;
+}
+
+.float-heart:nth-of-type(4) {
+  right: 7%;
+  font-size: 14px;
+  animation-delay: -4s;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) rotate(0) scale(.7);
+    opacity: 0;
+  }
+  15% {
+    opacity: .7;
+  }
+  80% {
+    opacity: .65;
+  }
+  100% {
+    transform: translateY(-145px) rotate(35deg) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* Twinkling sparkles */
+
+.audio-sparkle {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: #e66ab4;
+  text-shadow: 0 0 8px white, 0 0 14px #ffb5df;
+  animation: sparkleTwinkle 1.8s ease-in-out infinite;
+}
+
+.sparkle-one {
+  top: 13px;
+  left: 15px;
+  font-size: 20px;
+}
+
+.sparkle-two {
+  top: 48px;
+  right: 14px;
+  font-size: 15px;
+  animation-delay: -.8s;
+}
+
+.sparkle-three {
+  bottom: 20px;
+  left: 17px;
+  font-size: 14px;
+  animation-delay: -.4s;
+}
+
+.sparkle-four {
+  bottom: 22px;
+  right: 18px;
+  font-size: 20px;
+  animation-delay: -1.2s;
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% {
+    opacity: .35;
+    transform: scale(.75) rotate(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.18) rotate(18deg);
+  }
+}
+
+.audio-title {
+  position: relative;
+  z-index: 2;
+  color: #a74791;
+  font-size: clamp(1.05rem, 4vw, 1.3rem);
+  font-weight: bold;
+  margin: .25rem 1.5rem .35rem;
+  text-shadow: 0 1px white, 0 0 12px #ffc4e9;
+}
+
+.audio-subtitle {
+  position: relative;
+  z-index: 2;
+  color: #a75b9b;
+  font-size: .9rem;
+  margin: 0 0 .9rem;
+}
+
+.song-heart {
+  display: inline-block;
+  margin: 0 5px;
+  animation: songPulse 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px #ff9bd5);
+}
+
+.song-heart:nth-child(2) {
+  animation-delay: -.7s;
+}
+
+@keyframes songPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.23); }
+}
+
+.audio-card audio {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 46px;
+  border-radius: 30px;
+  accent-color: #e85cab;
+}
+
+/* PAUSE OVERLAY */
 
 #pauseOverlay {
   position: absolute;
   inset: 0;
   z-index: 10;
-  background: #593d7bbd;
+  background: #593d7bc9;
   color: white;
   display: none;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
 }
-#pauseOverlay .panel { background: #fff0f7; }
-.hidden { display: none !important; }
 
-@media(prefers-reduced-motion:reduce) {
+#pauseOverlay .panel {
+  width: min(90vw, 420px);
+  background: #fff0f7;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* HEART POP EFFECTS */
+
+@keyframes popRing {
+  0% {
+    transform: scale(.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .panel {
+    width: 92vw;
+    border-radius: 23px;
+    padding: 1.1rem;
+  }
+
+  #gameScreen .game-art {
+    transform: scale(1.48);
+  }
+
+  .game-hud {
+    padding-left: 9px;
+    padding-right: 9px;
+    gap: 5px;
+  }
+
+  .heartsleft {
+    max-width: 52vw;
+    padding: 6px 8px;
+    font-size: .96rem;
+    letter-spacing: 0;
+  }
+
+  .score {
+    font-size: .98rem;
+    padding: 8px;
+  }
+
+  .pause {
+    min-width: 42px;
+    min-height: 42px;
+    padding: .25rem .55rem;
+  }
+
+  .game-caption {
+    padding: .45rem .85rem;
+  }
+
+  .letter-paper {
+    padding: .7rem;
+  }
+
+  .letter-content {
+    font-size: .96rem;
+  }
+
+  .audio-card {
+    margin: 1.7rem .1rem .9rem;
+    padding: 1.25rem .8rem .85rem;
+  }
+
+  .audio-title {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .audio-ribbon {
+    right: 13px;
+  }
+}
+
+@media (max-height: 620px) {
+  .screen:not(#gameScreen) {
+    align-items: flex-start;
+  }
+
+  #openingScreen,
+  #titleScreen,
+  #quizScreen,
+  #wrongScreen {
+    padding-top: max(16px, env(safe-area-inset-top));
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .panel {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+  }
+
+  .ornament {
+    margin-bottom: .35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
 }
@@ -263,7 +928,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
     <p>Heres our love website 🤤🤤🤤😛😛</p>
     <p>Are u readdyyyy💝💝👀👀👅</p>
     <div class="btnrow">
-      <button onclick="goToTitle()">ENTER OUR LITTLE WORLD 💝</button>
+      <button type="button" onclick="goToTitle()">ENTER OUR LITTLE WORLD 💝</button>
     </div>
     <p class="small" style="margin:1.2rem 0 0">♡ made with love, just for u ♡</p>
   </div>
@@ -279,22 +944,29 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
     <h1>OUR HEART GAME</h1>
     <p>Catch rika's falling hearts to unlock the next level👅👀😝🤤🥰😛</p>
     <div class="btnrow">
-      <button onclick="startZoom()">OPEN &amp; PLAY 💝</button>
+      <button type="button" onclick="startZoom()">OPEN &amp; PLAY 💝</button>
     </div>
   </div>
 </section>
 
 <!-- GAME SCREEN -->
 <section class="screen" id="gameScreen">
-  <img class="art" src="game-scene.png" alt="Cupid's heart-catching game scene">
+  <img class="art game-art" src="game-scene.png" alt="Cupid's heart-catching game scene">
   <div class="shade"></div>
-  <canvas id="gameCanvas" aria-label="Tap the falling hearts to catch them"></canvas>
+
+  <canvas
+    id="gameCanvas"
+    tabindex="0"
+    aria-label="Tap the falling hearts to catch them"
+  ></canvas>
 
   <div class="game-hud">
     <div class="heartsleft" id="heartProgress">♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡</div>
-    <div style="display:flex;gap:8px;align-items:center">
+
+    <div class="hud-actions">
       <div class="score" id="scoreDisplay">💗 x 0</div>
-      <button class="pause" onclick="togglePause()" aria-label="Pause game">Ⅱ</button>
+      <button class="pause" id="pauseButton" type="button"
+        onclick="togglePause()" aria-label="Pause game">Ⅱ</button>
     </div>
   </div>
 
@@ -305,9 +977,10 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 
   <div id="pauseOverlay">
     <div class="panel">
+      <div class="ornament">💝 ♡ 💝</div>
       <h2>PAUSED 💝</h2>
       <p>your rika hearts are waiting 😛</p>
-      <button onclick="togglePause()">CONTINUE 💗</button>
+      <button type="button" onclick="togglePause()">CONTINUE 💗</button>
     </div>
   </div>
 </section>
@@ -325,7 +998,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 <!-- WRONG ANSWER SCREEN -->
 <section class="screen wrong" id="wrongScreen">
   <h1>THAPPA SOLRIYAAAA SUNNI 🤬🤬</h1>
-  <button onclick="retryQuestion()">Do again😒</button>
+  <button type="button" onclick="retryQuestion()">Do again😒</button>
 </section>
 
 <!-- LOVE LETTER SCREEN -->
@@ -334,7 +1007,16 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
     <div class="ornament">💝 💌 💝</div>
     <h2>YOU UNLOCKED MY LETTER 💌</h2>
     <h2>astro my love 💙💗</h2>
-    <p class="small">💙💗 💙💗 💙💗</p>
+
+    <div class="heart-border" aria-label="Decorative heart border">
+      <span class="tiny-heart">♡</span>
+      <span>💝</span>
+      <span class="tiny-heart">♥</span>
+      <span>♡</span>
+      <span class="tiny-heart">♥</span>
+      <span>💝</span>
+      <span class="tiny-heart">♡</span>
+    </div>
 
     <div class="letter-paper">
       <div class="letter-content" id="letterText">Hi baby uhmmmm making ts at like 4 am😭😭😭✌️uhm soo
@@ -355,45 +1037,78 @@ Ur always my brightest star in the sky baby 🥰🥰🥰🥰 and ill love u alwa
       promise me to never giveup on us okay</div>
     </div>
 
-    <div class="audio-row">
-  <p class="small">😝😛😝😛ummah baby</p>
-  <audio controls loop preload="none" style="width:100%">
-    <source src="our-song.mp3" type="audio/mpeg">
-    Your browser does not support audio.
-  </audio>
-</div>
+    <!-- UPDATED FLOATING MUSIC PLAYER -->
+    <div class="audio-card">
+      <span class="audio-ribbon" aria-hidden="true">
+        <span class="ribbon-knot"></span>
+      </span>
+
+      <span class="float-heart" aria-hidden="true">♥</span>
+      <span class="float-heart" aria-hidden="true">♡</span>
+      <span class="float-heart" aria-hidden="true">♥</span>
+      <span class="float-heart" aria-hidden="true">♡</span>
+
+      <span class="audio-sparkle sparkle-one" aria-hidden="true">✦</span>
+      <span class="audio-sparkle sparkle-two" aria-hidden="true">✧</span>
+      <span class="audio-sparkle sparkle-three" aria-hidden="true">✧</span>
+      <span class="audio-sparkle sparkle-four" aria-hidden="true">✦</span>
+
+      <div class="audio-title">
+        <span class="song-heart">💝</span>
+        our little song
+        <span class="song-heart">💝</span>
+      </div>
+
+      <p class="audio-subtitle">press play, kanna 😛</p>
+
+      <audio id="ourSong" controls loop preload="none">
+        <source src="our-song.mp3" type="audio/mpeg">
+        Your browser does not support audio.
+      </audio>
+    </div>
+
+    <p class="small" style="margin:1rem 0 0">😝😛😝😛ummah baby</p>
   </div>
 </section>
 
 <script>
+"use strict";
+
 /* SCREEN CONTROL */
+
 const screens = document.querySelectorAll(".screen");
 
 function showScreen(id) {
   screens.forEach(screen => screen.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
 }
 
 function goToTitle() {
   showScreen("titleScreen");
 }
 
-/* CAMERA ZOOM INTO GAME */
+/* TITLE TRANSITION */
+
 let zoomStarted = false;
+let transitionTimer = null;
 
 function startZoom() {
   if (zoomStarted) return;
+
   zoomStarted = true;
 
   const title = document.getElementById("titleScreen");
   title.classList.add("zooming");
 
-  setTimeout(() => {
+  transitionTimer = setTimeout(() => {
     title.classList.remove("zooming");
     showScreen("gameScreen");
 
     const game = document.getElementById("gameScreen");
     game.classList.remove("game-enter");
+
     void game.offsetWidth;
     game.classList.add("game-enter");
 
@@ -403,18 +1118,24 @@ function startZoom() {
 }
 
 /* HEART-CATCHING GAME */
+
 const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d", { alpha: true });
+
+const TARGET_SCORE = 10;
 
 let gameWidth = 0;
 let gameHeight = 0;
 let hearts = [];
+let particles = [];
 let score = 0;
 let gameRunning = false;
 let paused = false;
 let lastFrame = 0;
 let spawnTimer = 0;
 let animationId = null;
+let finishTimer = null;
+let gameSession = 0;
 
 function resizeCanvas() {
   const rect = canvas.getBoundingClientRect();
@@ -422,6 +1143,8 @@ function resizeCanvas() {
 
   gameWidth = rect.width;
   gameHeight = rect.height;
+
+  if (!gameWidth || !gameHeight) return;
 
   canvas.width = Math.round(gameWidth * dpr);
   canvas.height = Math.round(gameHeight * dpr);
@@ -432,40 +1155,102 @@ function resizeCanvas() {
 
 window.addEventListener("resize", resizeCanvas);
 
+window.addEventListener("orientationchange", () => {
+  setTimeout(resizeCanvas, 150);
+});
+
+function makeHeart(x, y, speed, size) {
+  return {
+    x,
+    y,
+    speed,
+    size,
+    caught: false,
+    rotation: (Math.random() - 0.5) * 0.24,
+    wobble: Math.random() * Math.PI * 2,
+    wobbleSpeed: 1 + Math.random() * 2
+  };
+}
+
 function resetGame() {
-  if (animationId) cancelAnimationFrame(animationId);
+  if (animationId !== null) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+
+  if (finishTimer !== null) {
+    clearTimeout(finishTimer);
+    finishTimer = null;
+  }
+
+  gameSession++;
 
   score = 0;
   hearts = [];
+  particles = [];
   spawnTimer = 0;
   lastFrame = 0;
   paused = false;
   gameRunning = true;
 
   document.getElementById("pauseOverlay").style.display = "none";
+  document.getElementById("pauseButton").textContent = "Ⅱ";
+  document.getElementById("pauseButton").setAttribute("aria-label", "Pause game");
+
   updateHUD();
 
   for (let i = 0; i < 5; i++) {
-    hearts.push({
-      x: gameWidth * (0.12 + Math.random() * 0.76),
-      y: -Math.random() * gameHeight,
-      speed: 65 + Math.random() * 65,
-      size: 25 + Math.random() * 9,
-      caught: false
-    });
+    const x = gameWidth * (0.12 + Math.random() * 0.76);
+    const y = gameHeight * (0.12 + Math.random() * 0.58);
+
+    hearts.push(
+      makeHeart(
+        x,
+        y,
+        48 + Math.random() * 35,
+        29 + Math.random() * 9
+      )
+    );
   }
 
+  drawGame();
   animationId = requestAnimationFrame(gameLoop);
 }
 
 function updateHUD() {
   document.getElementById("scoreDisplay").textContent = "💗 x " + score;
 
-  const caught = Math.min(score, 10);
-  const remaining = 10 - caught;
+  const caught = Math.min(score, TARGET_SCORE);
+  const remaining = TARGET_SCORE - caught;
 
   document.getElementById("heartProgress").textContent =
     "♥ ".repeat(caught) + "♡ ".repeat(remaining);
+
+  canvas.setAttribute(
+    "aria-label",
+    "You have caught " + caught + " of " + TARGET_SCORE + " hearts"
+  );
+}
+
+function drawHeart(x, y, size, rotation, color) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+
+  const s = size / 32;
+  ctx.scale(s, s);
+
+  ctx.beginPath();
+  ctx.moveTo(0, 10);
+  ctx.bezierCurveTo(-5, 5, -16, -2, -14, -9);
+  ctx.bezierCurveTo(-12, -19, -2, -18, 0, -10);
+  ctx.bezierCurveTo(2, -18, 12, -19, 14, -9);
+  ctx.bezierCurveTo(16, -2, 5, 5, 0, 10);
+  ctx.closePath();
+
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.restore();
 }
 
 function drawGame() {
@@ -474,13 +1259,16 @@ function drawGame() {
   ctx.clearRect(0, 0, gameWidth, gameHeight);
 
   const glow = ctx.createRadialGradient(
-    gameWidth / 2, gameHeight / 2, 10,
-    gameWidth / 2, gameHeight / 2,
-    Math.max(gameWidth, gameHeight) * 0.75
+    gameWidth / 2,
+    gameHeight / 2,
+    10,
+    gameWidth / 2,
+    gameHeight / 2,
+    Math.max(gameWidth, gameHeight) * 0.7
   );
 
-  glow.addColorStop(0, "rgba(255,220,249,0.12)");
-  glow.addColorStop(1, "rgba(119,75,190,0.18)");
+  glow.addColorStop(0, "rgba(255,220,249,0.04)");
+  glow.addColorStop(1, "rgba(119,75,190,0.10)");
 
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, gameWidth, gameHeight);
@@ -489,50 +1277,112 @@ function drawGame() {
     if (heart.caught) return;
 
     ctx.save();
-    ctx.font = `bold ${heart.size}px Georgia`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
     ctx.shadowColor = "#ff8bd5";
-    ctx.shadowBlur = 15;
-    ctx.fillStyle = "#ffb0df";
-    ctx.fillText("♥", heart.x, heart.y);
+    ctx.shadowBlur = 17;
+
+    drawHeart(
+      heart.x,
+      heart.y,
+      heart.size,
+      heart.rotation,
+      "#ff8fce"
+    );
 
     ctx.shadowBlur = 0;
-    ctx.font = `bold ${Math.max(10, heart.size * 0.35)}px Trebuchet MS`;
-    ctx.fillStyle = "#fff";
-    ctx.fillText("rika", heart.x, heart.y + heart.size * 0.6);
+    ctx.font = `bold ${Math.max(10, heart.size * 0.31)}px Trebuchet MS`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("rika", heart.x, heart.y + heart.size * 0.05);
+
+    ctx.restore();
+  });
+
+  particles.forEach(particle => {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, particle.life / particle.maxLife);
+    ctx.fillStyle = particle.color;
+    ctx.font = `bold ${particle.size}px Georgia`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(particle.symbol, particle.x, particle.y);
     ctx.restore();
   });
 }
 
+function addPopEffect(x, y) {
+  const colors = ["#ffb0df", "#fff5ff", "#d8b6ff", "#ff78c4"];
+
+  for (let i = 0; i < 11; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 35 + Math.random() * 105;
+
+    particles.push({
+      x,
+      y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 0.42 + Math.random() * 0.2,
+      maxLife: 0.62,
+      size: 10 + Math.random() * 11,
+      symbol: Math.random() > 0.35 ? "♥" : "✦",
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+}
+
 function gameLoop(timestamp) {
-  if (!gameRunning) return;
+  if (!gameRunning) {
+    animationId = null;
+    return;
+  }
 
   if (!lastFrame) lastFrame = timestamp;
 
-  const delta = Math.min((timestamp - lastFrame) / 1000, 0.04);
+  const delta = Math.min((timestamp - lastFrame) / 1000, 0.035);
   lastFrame = timestamp;
 
   if (!paused) {
     spawnTimer += delta;
 
-    if (spawnTimer > 0.85 &&
-        hearts.filter(h => !h.caught).length < 7) {
+    const activeHearts = hearts.filter(heart => !heart.caught).length;
+
+    if (spawnTimer >= 0.72 && activeHearts < 7) {
       spawnTimer = 0;
-      hearts.push({
-        x: 25 + Math.random() * Math.max(1, gameWidth - 50),
-        y: -35,
-        speed: 80 + Math.random() * 95,
-        size: 25 + Math.random() * 9,
-        caught: false
-      });
+
+      const margin = Math.min(42, gameWidth * 0.1);
+      const availableWidth = Math.max(1, gameWidth - margin * 2);
+
+      hearts.push(
+        makeHeart(
+          margin + Math.random() * availableWidth,
+          -35,
+          55 + Math.random() * 75,
+          29 + Math.random() * 10
+        )
+      );
     }
 
     hearts.forEach(heart => {
-      if (!heart.caught) heart.y += heart.speed * delta;
+      if (heart.caught) return;
+
+      heart.y += heart.speed * delta;
+      heart.wobble += heart.wobbleSpeed * delta;
+      heart.x += Math.sin(heart.wobble) * 13 * delta;
     });
 
-    hearts = hearts.filter(heart => heart.y < gameHeight + 50);
+    hearts = hearts.filter(heart =>
+      heart.caught || heart.y < gameHeight + 55
+    );
+
+    particles.forEach(particle => {
+      particle.x += particle.vx * delta;
+      particle.y += particle.vy * delta;
+      particle.vy += 65 * delta;
+      particle.life -= delta;
+    });
+
+    particles = particles.filter(particle => particle.life > 0);
 
     drawGame();
   }
@@ -540,8 +1390,14 @@ function gameLoop(timestamp) {
   animationId = requestAnimationFrame(gameLoop);
 }
 
+/* PHONE AND MOUSE TAPPING */
+
 function catchHeart(event) {
-  if (!gameRunning || paused) return;
+  if (event.isPrimary === false) return;
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  if (!gameRunning || paused || score >= TARGET_SCORE) return;
+
+  event.preventDefault();
 
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -550,54 +1406,77 @@ function catchHeart(event) {
   let chosen = null;
   let bestDistance = Infinity;
 
-  hearts.forEach(heart => {
-    if (heart.caught) return;
+  for (const heart of hearts) {
+    if (heart.caught) continue;
 
     const distance = Math.hypot(heart.x - x, heart.y - y);
+    const hitRadius = Math.max(40, heart.size * 1.7);
 
-    if (distance < Math.max(38, heart.size * 1.6) &&
-        distance < bestDistance) {
+    if (distance <= hitRadius && distance < bestDistance) {
       chosen = heart;
       bestDistance = distance;
     }
-  });
+  }
 
   if (!chosen) return;
 
   chosen.caught = true;
-  score++;
+  addPopEffect(chosen.x, chosen.y);
+
+  score = Math.min(score + 1, TARGET_SCORE);
   updateHUD();
-
-  if (score >= 10) {
-    gameRunning = false;
-    if (animationId) cancelAnimationFrame(animationId);
-
-    setTimeout(() => {
-      showScreen("quizScreen");
-      renderQuestion();
-    }, 350);
-
-    return;
-  }
-
   drawGame();
+
+  if (score >= TARGET_SCORE) finishGame();
 }
 
-canvas.addEventListener("pointerdown", catchHeart);
+canvas.addEventListener("pointerdown", catchHeart, { passive: false });
+
+function finishGame() {
+  if (!gameRunning) return;
+
+  gameRunning = false;
+  paused = false;
+
+  if (animationId !== null) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
+  }
+
+  document.getElementById("pauseOverlay").style.display = "none";
+
+  const thisSession = gameSession;
+
+  finishTimer = setTimeout(() => {
+    if (thisSession !== gameSession) return;
+
+    showScreen("quizScreen");
+    renderQuestion();
+    finishTimer = null;
+  }, 450);
+}
 
 function togglePause() {
   if (!gameRunning) return;
 
   paused = !paused;
+
   document.getElementById("pauseOverlay").style.display =
     paused ? "flex" : "none";
 
-  if (!paused) {
-    lastFrame = 0;
-  }
+  document.getElementById("pauseButton").textContent =
+    paused ? "▶" : "Ⅱ";
+
+  document.getElementById("pauseButton").setAttribute(
+    "aria-label",
+    paused ? "Resume game" : "Pause game"
+  );
+
+  if (!paused) lastFrame = 0;
 }
 
 /* ALL NINE QUIZ QUESTIONS */
+
 const questions = [
   {
     question: "do u love me",
@@ -651,25 +1530,34 @@ let questionIndex = 0;
 function renderQuestion() {
   const question = questions[questionIndex];
 
+  if (!question) {
+    showScreen("letterScreen");
+    return;
+  }
+
   document.getElementById("questionNumber").textContent =
     `QUESTION ${questionIndex + 1} OF ${questions.length}`;
 
-  document.getElementById("questionText").textContent = question.question;
+  document.getElementById("questionText").textContent =
+    question.question;
 
   const optionsBox = document.getElementById("answerOptions");
-  optionsBox.innerHTML = "";
+  optionsBox.replaceChildren();
 
   question.options.forEach((option, index) => {
     const button = document.createElement("button");
+
     button.type = "button";
     button.textContent = option;
     button.addEventListener("click", () => checkAnswer(index));
+
     optionsBox.appendChild(button);
   });
 }
 
 function checkAnswer(selectedIndex) {
   const question = questions[questionIndex];
+  if (!question) return;
 
   if (selectedIndex !== question.correct) {
     showScreen("wrongScreen");
