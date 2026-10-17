@@ -4,8 +4,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f8c4e8">
+<meta name="theme-color" content="#050505">
 <title>Cupid's Quest 💝</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -14,6 +18,7 @@
   --lav: #b79bff;
   --ink: #823d91;
   --cream: #fff1fb;
+  --gothic: "UnifrakturMaguntia", "Old English Text MT", fantasy;
 }
 
 * {
@@ -26,7 +31,7 @@ html, body {
   width: 100%;
   min-height: 100%;
   font-family: Georgia, "Trebuchet MS", serif;
-  background: #a99af8;
+  background: #050505;
   color: var(--ink);
 }
 
@@ -80,6 +85,139 @@ button:focus-visible {
 .screen.active {
   display: flex;
 }
+
+/* OPENING VIDEO */
+
+#openingScreen {
+  z-index: 10;
+  background: #050505;
+  color: #fff;
+  overflow: hidden;
+  padding: 0;
+}
+
+#introVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.intro-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 18px;
+  color: white;
+  background: #00000012;
+  text-align: center;
+}
+
+.intro-title,
+.intro-subtitle,
+.intro-goodluck,
+.start-button {
+  font-family: var(--gothic);
+  font-weight: normal;
+  color: #fff;
+  text-shadow:
+    2px 3px 0 #000,
+    0 0 4px #000,
+    0 0 15px #fff;
+}
+
+.intro-title {
+  margin: 0 0 18px;
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  line-height: 1.08;
+}
+
+.intro-subtitle {
+  margin: 0 0 22px;
+  font-size: clamp(1.7rem, 5.5vw, 3.2rem);
+  line-height: 1.2;
+}
+
+.intro-goodluck {
+  margin: 0 0 32px;
+  font-size: clamp(2rem, 6vw, 3.8rem);
+}
+
+.start-button {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  padding: 10px 24px;
+  box-shadow: none;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  text-shadow: 2px 3px #000, 0 0 12px #fff;
+}
+
+.start-button:hover {
+  transform: scale(1.07);
+  filter: brightness(1.2);
+}
+
+.start-button:active {
+  transform: scale(.98);
+}
+
+.start-button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 5px;
+}
+
+.loading-area {
+  width: min(82vw, 430px);
+  margin-top: 24px;
+  display: none;
+}
+
+.loading-area.visible {
+  display: block;
+}
+
+.loading-label {
+  color: #fff;
+  font-family: var(--gothic);
+  font-size: 1.7rem;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px #000, 0 0 10px #fff;
+}
+
+.loading-bars {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  height: 17px;
+}
+
+.loading-segment {
+  flex: 1;
+  background: #171717;
+  border: 1px solid #fff;
+  min-width: 0;
+}
+
+.loading-segment.filled {
+  background: #fff;
+}
+
+#startButton:disabled {
+  cursor: default;
+  opacity: .75;
+  transform: none;
+}
+
+/* EXISTING SCREEN ART */
 
 .art {
   position: absolute;
@@ -153,11 +291,6 @@ p {
   font-size: 1.4rem;
   letter-spacing: .25rem;
   margin-bottom: .65rem;
-}
-
-#openingScreen {
-  z-index: 6;
-  background: radial-gradient(circle at top, #ffe0f4, #c6b0ff 75%);
 }
 
 #titleScreen {
@@ -292,7 +425,7 @@ p {
   width: max-content;
   max-width: 94vw;
   border: 2px solid #ffd7f1;
-  background: #ffe9f6eF;
+  background: #ffe9f6ef;
   border-radius: 28px;
   padding: .55rem 1.2rem;
   color: #a64d9d;
@@ -310,7 +443,7 @@ p {
   font-size: .86rem;
 }
 
-/* TITLE TO GAME TRANSITION */
+/* EXISTING GAME TRANSITION */
 
 .zooming {
   animation: cameraZoom .95s cubic-bezier(.16,.78,.25,1) forwards;
@@ -406,6 +539,7 @@ p {
 #letterScreen {
   padding: max(12px, env(safe-area-inset-top)) 12px
            max(12px, env(safe-area-inset-bottom));
+  transform-origin: center center;
 }
 
 .letter-panel {
@@ -416,6 +550,21 @@ p {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: clamp(.9rem, 3vw, 1.6rem);
+}
+
+/* THE ONLY LETTER TRANSITION: EXTREME ZOOM IN */
+
+#letterScreen.letter-zoom {
+  animation: letterSuperZoom 1.15s cubic-bezier(.12,.82,.18,1) both;
+}
+
+@keyframes letterSuperZoom {
+  from {
+    transform: scale(.015);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 /* Decorative heart border */
@@ -486,7 +635,7 @@ p {
   padding: 0;
 }
 
-/* FLOATING DECORATED MUSIC PLAYER */
+/* MUSIC PLAYER */
 
 .audio-card {
   position: relative;
@@ -528,12 +677,7 @@ p {
   width: 55%;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(
-    110deg,
-    transparent,
-    #ffffffa8,
-    transparent
-  );
+  background: linear-gradient(110deg, transparent, #ffffffa8, transparent);
   transform: skewX(-18deg);
   pointer-events: none;
   z-index: 0;
@@ -541,46 +685,26 @@ p {
 }
 
 @keyframes playerFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(-.4deg);
-  }
-  50% {
-    transform: translateY(-9px) rotate(.4deg);
-  }
+  0%, 100% { transform: translateY(0) rotate(-.4deg); }
+  50% { transform: translateY(-9px) rotate(.4deg); }
 }
 
 @keyframes playerGlow {
   0%, 100% {
-    box-shadow:
-      0 7px 0 #e8a0d0,
-      0 12px 22px #d77fc955,
-      0 0 22px #ffbfe988,
-      inset 0 0 0 4px #fff8ff;
+    box-shadow: 0 7px 0 #e8a0d0, 0 12px 22px #d77fc955,
+                0 0 22px #ffbfe988, inset 0 0 0 4px #fff8ff;
   }
   50% {
-    box-shadow:
-      0 7px 0 #e8a0d0,
-      0 15px 30px #d77fc977,
-      0 0 35px #ffbfe9dd,
-      inset 0 0 0 4px #fff8ff;
+    box-shadow: 0 7px 0 #e8a0d0, 0 15px 30px #d77fc977,
+                0 0 35px #ffbfe9dd, inset 0 0 0 4px #fff8ff;
   }
 }
 
 @keyframes playerShine {
-  0%, 65% {
-    left: -80%;
-    opacity: 0;
-  }
-  72% {
-    opacity: .8;
-  }
-  90%, 100% {
-    left: 140%;
-    opacity: 0;
-  }
+  0%, 65% { left: -80%; opacity: 0; }
+  72% { opacity: .8; }
+  90%, 100% { left: 140%; opacity: 0; }
 }
-
-/* Pink bow attached to the top edge */
 
 .audio-ribbon {
   position: absolute;
@@ -634,8 +758,6 @@ p {
   50% { transform: translateY(-4px) rotate(4deg); }
 }
 
-/* Floating hearts */
-
 .float-heart {
   position: absolute;
   z-index: 0;
@@ -672,23 +794,11 @@ p {
 }
 
 @keyframes floatUp {
-  0% {
-    transform: translateY(0) rotate(0) scale(.7);
-    opacity: 0;
-  }
-  15% {
-    opacity: .7;
-  }
-  80% {
-    opacity: .65;
-  }
-  100% {
-    transform: translateY(-145px) rotate(35deg) scale(1.2);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) rotate(0) scale(.7); opacity: 0; }
+  15% { opacity: .7; }
+  80% { opacity: .65; }
+  100% { transform: translateY(-145px) rotate(35deg) scale(1.2); opacity: 0; }
 }
-
-/* Twinkling sparkles */
 
 .audio-sparkle {
   position: absolute;
@@ -699,42 +809,14 @@ p {
   animation: sparkleTwinkle 1.8s ease-in-out infinite;
 }
 
-.sparkle-one {
-  top: 13px;
-  left: 15px;
-  font-size: 20px;
-}
-
-.sparkle-two {
-  top: 48px;
-  right: 14px;
-  font-size: 15px;
-  animation-delay: -.8s;
-}
-
-.sparkle-three {
-  bottom: 20px;
-  left: 17px;
-  font-size: 14px;
-  animation-delay: -.4s;
-}
-
-.sparkle-four {
-  bottom: 22px;
-  right: 18px;
-  font-size: 20px;
-  animation-delay: -1.2s;
-}
+.sparkle-one { top: 13px; left: 15px; font-size: 20px; }
+.sparkle-two { top: 48px; right: 14px; font-size: 15px; animation-delay: -.8s; }
+.sparkle-three { bottom: 20px; left: 17px; font-size: 14px; animation-delay: -.4s; }
+.sparkle-four { bottom: 22px; right: 18px; font-size: 20px; animation-delay: -1.2s; }
 
 @keyframes sparkleTwinkle {
-  0%, 100% {
-    opacity: .35;
-    transform: scale(.75) rotate(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.18) rotate(18deg);
-  }
+  0%, 100% { opacity: .35; transform: scale(.75) rotate(0); }
+  50% { opacity: 1; transform: scale(1.18) rotate(18deg); }
 }
 
 .audio-title {
@@ -762,9 +844,7 @@ p {
   filter: drop-shadow(0 0 5px #ff9bd5);
 }
 
-.song-heart:nth-child(2) {
-  animation-delay: -.7s;
-}
+.song-heart:nth-child(2) { animation-delay: -.7s; }
 
 @keyframes songPulse {
   0%, 100% { transform: scale(1); }
@@ -806,17 +886,11 @@ p {
   display: none !important;
 }
 
-/* HEART POP EFFECTS */
+/* GAME HEART POP */
 
 @keyframes popRing {
-  0% {
-    transform: scale(.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
+  0% { transform: scale(.2); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
 
 @media (max-width: 480px) {
@@ -826,9 +900,7 @@ p {
     padding: 1.1rem;
   }
 
-  #gameScreen .game-art {
-    transform: scale(1.48);
-  }
+  #gameScreen .game-art { transform: scale(1.48); }
 
   .game-hud {
     padding-left: 9px;
@@ -843,10 +915,7 @@ p {
     letter-spacing: 0;
   }
 
-  .score {
-    font-size: .98rem;
-    padding: 8px;
-  }
+  .score { font-size: .98rem; padding: 8px; }
 
   .pause {
     min-width: 42px;
@@ -854,65 +923,58 @@ p {
     padding: .25rem .55rem;
   }
 
-  .game-caption {
-    padding: .45rem .85rem;
-  }
-
-  .letter-paper {
-    padding: .7rem;
-  }
-
-  .letter-content {
-    font-size: .96rem;
-  }
+  .game-caption { padding: .45rem .85rem; }
+  .letter-paper { padding: .7rem; }
+  .letter-content { font-size: .96rem; }
 
   .audio-card {
     margin: 1.7rem .1rem .9rem;
     padding: 1.25rem .8rem .85rem;
   }
 
-  .audio-title {
-    margin-left: 1rem;
-    margin-right: 1rem;
-  }
-
-  .audio-ribbon {
-    right: 13px;
-  }
+  .audio-title { margin-left: 1rem; margin-right: 1rem; }
+  .audio-ribbon { right: 13px; }
 }
 
 @media (max-height: 620px) {
-  .screen:not(#gameScreen) {
-    align-items: flex-start;
-  }
+  .screen:not(#gameScreen) { align-items: flex-start; }
 
-  #openingScreen,
-  #titleScreen,
-  #quizScreen,
-  #wrongScreen {
+  #titleScreen, #quizScreen, #wrongScreen {
     padding-top: max(16px, env(safe-area-inset-top));
     padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
-  .panel {
-    margin-top: auto;
-    margin-bottom: auto;
+  .panel { margin-top: auto; margin-bottom: auto; }
+  h1 { font-size: clamp(1.8rem, 5vw, 3rem); }
+  .ornament { margin-bottom: .35rem; }
+
+  #openingScreen .intro-content {
+    justify-content: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
   }
 
-  h1 {
-    font-size: clamp(1.8rem, 5vw, 3rem);
+  #openingScreen .intro-title {
+    font-size: clamp(2.3rem, 7vw, 4rem);
+    margin-bottom: 10px;
   }
 
-  .ornament {
-    margin-bottom: .35rem;
+  #openingScreen .intro-subtitle {
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    margin-bottom: 10px;
   }
+
+  #openingScreen .intro-goodluck {
+    margin-bottom: 12px;
+  }
+
+  .loading-area { margin-top: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
+  /* Keep the requested letter zoom available. */
+  .letter-zoom {
+    animation-duration: 1.15s !important;
   }
 }
 </style>
@@ -920,21 +982,49 @@ p {
 
 <body>
 
-<!-- OPENING PAGE -->
+<!-- NEW OPENING VIDEO SCREEN -->
 <section class="screen active" id="openingScreen">
-  <div class="panel">
-    <div class="ornament">♡ ✦ ♡ ✦ ♡</div>
-    <h1>HIII CHELLAMMM😝😝😛</h1>
-    <p>Heres our love website 🤤🤤🤤😛😛</p>
-    <p>Are u readdyyyy💝💝👀👀👅</p>
-    <div class="btnrow">
-      <button type="button" onclick="goToTitle()">ENTER OUR LITTLE WORLD 💝</button>
+  <video
+    id="introVideo"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true">
+    <source src="intro-video.mp4" type="video/mp4">
+  </video>
+
+  <div class="intro-content">
+    <h1 class="intro-title">Welcome my love</h1>
+    <p class="intro-subtitle">Enter a world just for us</p>
+    <p class="intro-goodluck">Goodluck</p>
+
+    <button id="startButton" class="start-button" type="button">
+      START
+    </button>
+
+    <div id="loadingArea" class="loading-area" aria-live="polite">
+      <div id="loadingLabel" class="loading-label">LOADING...</div>
+      <div id="loadingBars" class="loading-bars" aria-label="Loading progress">
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+        <span class="loading-segment"></span>
+      </div>
     </div>
-    <p class="small" style="margin:1.2rem 0 0">♡ made with love, just for u ♡</p>
   </div>
 </section>
 
-<!-- TITLE SCREEN -->
+<!-- EXISTING TITLE SCREEN -->
 <section class="screen" id="titleScreen">
   <img class="art" src="title-screen.png" alt="Cupid's Quest title artwork">
   <div class="shade"></div>
@@ -954,11 +1044,8 @@ p {
   <img class="art game-art" src="game-scene.png" alt="Cupid's heart-catching game scene">
   <div class="shade"></div>
 
-  <canvas
-    id="gameCanvas"
-    tabindex="0"
-    aria-label="Tap the falling hearts to catch them"
-  ></canvas>
+  <canvas id="gameCanvas" tabindex="0"
+    aria-label="Tap the falling hearts to catch them"></canvas>
 
   <div class="game-hud">
     <div class="heartsleft" id="heartProgress">♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡</div>
@@ -1037,7 +1124,7 @@ Ur always my brightest star in the sky baby 🥰🥰🥰🥰 and ill love u alwa
       promise me to never giveup on us okay</div>
     </div>
 
-    <!-- UPDATED FLOATING MUSIC PLAYER -->
+    <!-- MUSIC PLAYER -->
     <div class="audio-card">
       <span class="audio-ribbon" aria-hidden="true">
         <span class="ribbon-knot"></span>
@@ -1085,9 +1172,50 @@ function showScreen(id) {
   if (target) target.classList.add("active");
 }
 
-function goToTitle() {
-  showScreen("titleScreen");
-}
+/* OPENING VIDEO + START + LEFT-TO-RIGHT LOADING */
+
+const introVideo = document.getElementById("introVideo");
+const startButton = document.getElementById("startButton");
+const loadingArea = document.getElementById("loadingArea");
+const loadingLabel = document.getElementById("loadingLabel");
+const loadingSegments = Array.from(
+  document.querySelectorAll(".loading-segment")
+);
+
+let introStarted = false;
+let loadingTimer = null;
+
+startButton.addEventListener("click", () => {
+  if (introStarted) return;
+
+  introStarted = true;
+  startButton.disabled = true;
+  startButton.textContent = "PLEASE WAIT";
+  loadingArea.classList.add("visible");
+  loadingLabel.textContent = "LOADING...";
+
+  /* Try to start the video on devices that blocked autoplay. */
+  introVideo.play().catch(() => {});
+
+  let progress = 0;
+
+  loadingTimer = setInterval(() => {
+    if (progress < loadingSegments.length) {
+      loadingSegments[progress].classList.add("filled");
+      progress++;
+    }
+
+    if (progress >= loadingSegments.length) {
+      clearInterval(loadingTimer);
+      loadingTimer = null;
+      loadingLabel.textContent = "READY";
+
+      setTimeout(() => {
+        showScreen("titleScreen");
+      }, 180);
+    }
+  }, 115);
+});
 
 /* TITLE TRANSITION */
 
@@ -1475,7 +1603,7 @@ function togglePause() {
   if (!paused) lastFrame = 0;
 }
 
-/* ALL NINE QUIZ QUESTIONS */
+/* ALL NINE EXISTING QUIZ QUESTIONS */
 
 const questions = [
   {
@@ -1527,11 +1655,22 @@ const questions = [
 
 let questionIndex = 0;
 
+function openLetterWithSuperZoom() {
+  const letterScreen = document.getElementById("letterScreen");
+
+  /* Reset the animation so it plays whenever the letter is opened. */
+  letterScreen.classList.remove("letter-zoom");
+  showScreen("letterScreen");
+
+  void letterScreen.offsetWidth;
+  letterScreen.classList.add("letter-zoom");
+}
+
 function renderQuestion() {
   const question = questions[questionIndex];
 
   if (!question) {
-    showScreen("letterScreen");
+    openLetterWithSuperZoom();
     return;
   }
 
@@ -1567,7 +1706,7 @@ function checkAnswer(selectedIndex) {
   questionIndex++;
 
   if (questionIndex >= questions.length) {
-    showScreen("letterScreen");
+    openLetterWithSuperZoom();
     return;
   }
 
