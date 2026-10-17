@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,6 +24,7 @@ html, body {
   color: var(--ink);
 }
 body { overflow: hidden; }
+
 button {
   font: inherit;
   cursor: pointer;
@@ -36,6 +38,7 @@ button {
 }
 button:hover { transform: translateY(-2px); filter: brightness(1.04); }
 button:active { transform: translateY(2px); }
+
 .screen {
   position: fixed;
   inset: 0;
@@ -46,6 +49,7 @@ button:active { transform: translateY(2px); }
   overflow: hidden;
 }
 .screen.active { display: flex; }
+
 .art {
   position: absolute;
   inset: 0;
@@ -82,6 +86,7 @@ h1 {
 h2 { font-size: clamp(1.5rem, 4.5vw, 2.5rem); }
 p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 .small { font-size: .92rem; }
+
 .btnrow {
   display: flex;
   justify-content: center;
@@ -90,7 +95,11 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   margin-top: 1.2rem;
 }
 .ornament { font-size: 1.4rem; letter-spacing: .25rem; margin-bottom: .65rem; }
-#openingScreen { z-index: 6; background: radial-gradient(circle at top, #ffe0f4, #c6b0ff 75%); }
+
+#openingScreen {
+  z-index: 6;
+  background: radial-gradient(circle at top, #ffe0f4, #c6b0ff 75%);
+}
 #titleScreen { z-index: 1; }
 #previewScreen { z-index: 2; }
 #gameScreen { z-index: 3; background: #b8a3ff; }
@@ -168,10 +177,12 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   70% { transform: scale(1.025); opacity: 1; filter: blur(0); }
   100% { transform: scale(1); opacity: 1; filter: blur(0); }
 }
+
 .quiz-card { max-height: 88dvh; overflow: auto; }
 .options { display: grid; grid-template-columns: 1fr; gap: .7rem; margin-top: 1rem; }
 .options button { width: 100%; border-radius: 18px; text-align: center; }
 .qnum { font-weight: bold; color: #b44d9e; margin-bottom: .5rem; }
+
 .wrong {
   background: linear-gradient(135deg, #f83f67, #a20d39);
   color: #fff;
@@ -184,27 +195,42 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   color: white;
   text-shadow: 3px 3px #7d123e;
 }
+
+/* LOVE LETTER */
+#letterScreen {
+  padding: 12px;
+}
+.letter-panel {
+  max-height: 94dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
 .letter-paper {
-  background: repeating-linear-gradient(to bottom, #fff9ff 0, #fff9ff 31px, #e9b8e9 32px);
+  background: repeating-linear-gradient(
+    to bottom,
+    #fff9ff 0,
+    #fff9ff 31px,
+    #e9b8e9 32px
+  );
   border: 3px solid #f6b4e0;
   border-radius: 12px;
   padding: 1rem;
   text-align: left;
-  min-height: 170px;
   line-height: 32px;
   box-shadow: 0 0 0 5px #ffe3f7;
+  overflow-wrap: anywhere;
 }
-.letter-paper textarea {
-  width: 100%;
-  min-height: 155px;
-  resize: vertical;
-  border: 0;
-  outline: 0;
-  background: transparent;
+.letter-content {
   color: #7e438f;
   font: 1rem/32px Georgia, serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+  padding: 0;
 }
 .audio-row { margin-top: 1rem; }
+
 #pauseOverlay {
   position: absolute;
   inset: 0;
@@ -217,8 +243,12 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 }
 #pauseOverlay .panel { background: #fff0f7; }
 .hidden { display: none !important; }
+
 @media(prefers-reduced-motion:reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
 }
 </style>
 </head>
@@ -241,7 +271,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 
 <!-- TITLE SCREEN -->
 <section class="screen" id="titleScreen">
-  <img class="art" src="assets/title-screen.png" alt="Cupid's Quest title artwork">
+  <img class="art" src="title-screen.png" alt="Cupid's Quest title artwork">
   <div class="shade"></div>
   <div class="panel">
     <div class="ornament">♡ 🪽 ♡</div>
@@ -256,20 +286,23 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
 
 <!-- GAME SCREEN -->
 <section class="screen" id="gameScreen">
-  <img class="art" src="assets/game-scene.png" alt="Cupid's heart-catching game scene">
+  <img class="art" src="game-scene.png" alt="Cupid's heart-catching game scene">
   <div class="shade"></div>
   <canvas id="gameCanvas" aria-label="Tap the falling hearts to catch them"></canvas>
+
   <div class="game-hud">
-    <div class="heartsleft" id="heartProgress">♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥</div>
+    <div class="heartsleft" id="heartProgress">♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡</div>
     <div style="display:flex;gap:8px;align-items:center">
       <div class="score" id="scoreDisplay">💗 x 0</div>
       <button class="pause" onclick="togglePause()" aria-label="Pause game">Ⅱ</button>
     </div>
   </div>
+
   <div class="game-caption">
     <strong>saruuu😩😩</strong>
     <span>(ys ilmoan so what😛)</span>
   </div>
+
   <div id="pauseOverlay">
     <div class="panel">
       <h2>PAUSED 💝</h2>
@@ -295,19 +328,32 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
   <button onclick="retryQuestion()">Do again😒</button>
 </section>
 
-<!-- LETTER SCREEN -->
+<!-- LOVE LETTER SCREEN -->
 <section class="screen" id="letterScreen">
-  <div class="panel" style="max-height:94dvh;overflow:auto">
+  <div class="panel letter-panel">
     <div class="ornament">💝 💌 💝</div>
     <h2>YOU UNLOCKED MY LETTER 💌</h2>
     <h2>astro my love 💙💗</h2>
     <p class="small">💙💗 💙💗 💙💗</p>
+
     <div class="letter-paper">
-      <textarea id="letterText" aria-label="Your love letter" placeholder="Write your letter here, my love... 💗"></textarea>
+      <div class="letter-content" id="letterText">Hi baby uhmmmm making ts at like 4 am😭😭😭✌️uhm soo
+
+I love u sosososososks much i know we js had a fight😢🖕 i am sorry for sayin these and hurting u😢😢
+Hurting u hurts me as much as it would hurt u💔
+
+I love su sooooo much but sometimes I js feel sad thinkin of the past.its not that u did those in the past that I'm sad about but it's the fact u said u loved back then and u love now.im sad that ur definition of love wil hurt me again☹️and im sad u won't love me like I do.
+
+But i dooo love u alotgtttt I love u soooooo much i want to be w u day and night and crack only me AND u should crack only me and me (I'm jealous of ur body and soul aah😛😛) I love u sososososososos much i wanna be nice to ur sis ur mom and even ur pets and most of all i wanna be nice for u😢🖕💔I wanna give u all the love even I never got wokeowkwowkwok cause u deserve it🥰🥰
+
+Do u remember u always asked me why I love u so much but
+What's there to not love about u tho😢🖕 I'll love u day and night and never g t tired 😛😛😛😛caus its u
+Okwokw ummahhhhhh from head to tho diiii my kannaaa
+Ur my onluyyyyyyy kanna okokok I love uuuuu soooo muchhhh 
+
+Ur always my brightest star in the sky baby 🥰🥰🥰🥰</div>
     </div>
-    <div class="btnrow">
-      <button onclick="saveLetter()">SAVE LETTER ON THIS DEVICE 💗</button>
-    </div>
+
     <div class="audio-row">
       <p class="small">A little voice message for u 💝</p>
       <audio id="voiceAudio" controls loop preload="none" style="width:100%">
@@ -317,6 +363,7 @@ p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
     </div>
   </div>
 </section>
+
 <script>
 /* SCREEN CONTROL */
 const screens = document.querySelectorAll(".screen");
@@ -413,9 +460,11 @@ function resetGame() {
 function updateHUD() {
   document.getElementById("scoreDisplay").textContent = "💗 x " + score;
 
-  const remaining = Math.max(0, 10 - score);
+  const caught = Math.min(score, 10);
+  const remaining = 10 - caught;
+
   document.getElementById("heartProgress").textContent =
-    "♥ ".repeat(10 - remaining) + "♡ ".repeat(remaining);
+    "♥ ".repeat(caught) + "♡ ".repeat(remaining);
 }
 
 function drawGame() {
@@ -423,10 +472,10 @@ function drawGame() {
 
   ctx.clearRect(0, 0, gameWidth, gameHeight);
 
-  // Soft glow behind the falling hearts.
   const glow = ctx.createRadialGradient(
     gameWidth / 2, gameHeight / 2, 10,
-    gameWidth / 2, gameHeight / 2, Math.max(gameWidth, gameHeight) * 0.75
+    gameWidth / 2, gameHeight / 2,
+    Math.max(gameWidth, gameHeight) * 0.75
   );
 
   glow.addColorStop(0, "rgba(255,220,249,0.12)");
@@ -466,7 +515,8 @@ function gameLoop(timestamp) {
   if (!paused) {
     spawnTimer += delta;
 
-    if (spawnTimer > 0.85 && hearts.filter(h => !h.caught).length < 7) {
+    if (spawnTimer > 0.85 &&
+        hearts.filter(h => !h.caught).length < 7) {
       spawnTimer = 0;
       hearts.push({
         x: 25 + Math.random() * Math.max(1, gameWidth - 50),
@@ -496,7 +546,6 @@ function catchHeart(event) {
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
 
-  // Catch the closest heart near the tap.
   let chosen = null;
   let bestDistance = Infinity;
 
@@ -637,27 +686,8 @@ function checkAnswer(selectedIndex) {
 }
 
 function retryQuestion() {
-  // Keep the same question and its answer options.
   showScreen("quizScreen");
   renderQuestion();
-}
-
-/* LETTER: SAVE THE TEXT THE RECIPIENT WRITES */
-const letterText = document.getElementById("letterText");
-
-try {
-  letterText.value = localStorage.getItem("cupidsQuestLetter") || "";
-} catch (error) {
-  // The letter can still be edited if storage is unavailable.
-}
-
-function saveLetter() {
-  try {
-    localStorage.setItem("cupidsQuestLetter", letterText.value);
-    alert("Letter saved on this device 💗");
-  } catch (error) {
-    alert("Your letter is still here for now 💗 Keep a copy before leaving this page!");
-  }
 }
 </script>
 
