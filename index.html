@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cupid's Quest 💝</title>
+
+<style>
+:root {
+  --pink: #ff8fce;
+  --hot: #ef58a7;
+  --lav: #b79bff;
+  --ink: #823d91;
+  --cream: #fff1fb;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: Georgia, "Trebuchet MS", serif;
+  background: #a99af8;
+  color: var(--ink);
+}
+body { overflow: hidden; }
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 2px solid #ffb7e2;
+  color: #853e99;
+  background: linear-gradient(#fff8ff, #ffd5ef);
+  border-radius: 999px;
+  padding: .8rem 1.25rem;
+  box-shadow: 0 5px 0 #d86db4, 0 0 22px #fff8;
+  transition: transform .18s, filter .18s;
+}
+button:hover { transform: translateY(-2px); filter: brightness(1.04); }
+button:active { transform: translateY(2px); }
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+.screen.active { display: flex; }
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+  pointer-events: none;
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,#5e42a51a,#ffb1df16 65%,#4a2e6c20);
+  pointer-events: none;
+}
+.panel {
+  position: relative;
+  z-index: 2;
+  width: min(90vw, 660px);
+  padding: clamp(1rem, 4vw, 2.2rem);
+  border: 3px solid #ffe4fa;
+  border-radius: 28px;
+  background: #fff0f7df;
+  box-shadow: 0 0 0 5px #d88ddc8a, 0 0 40px #ffdbf7b8;
+  backdrop-filter: blur(3px);
+}
+h1, h2, p { margin-top: 0; }
+h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.05;
+  text-shadow: 2px 3px #ffd3ef, 0 0 16px white;
+}
+h2 { font-size: clamp(1.5rem, 4.5vw, 2.5rem); }
+p { font-size: clamp(1rem, 2.7vw, 1.25rem); line-height: 1.5; }
+.small { font-size: .92rem; }
+.btnrow {
+  display: flex;
+  justify-content: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+}
+.ornament { font-size: 1.4rem; letter-spacing: .25rem; margin-bottom: .65rem; }
+#openingScreen { z-index: 6; background: radial-gradient(circle at top, #ffe0f4, #c6b0ff 75%); }
+#titleScreen { z-index: 1; }
+#previewScreen { z-index: 2; }
+#gameScreen { z-index: 3; background: #b8a3ff; }
+#quizScreen, #wrongScreen, #letterScreen { z-index: 4; }
+#titleScreen .panel, #previewScreen .panel { background: #fff0f7d5; }
+
+#gameScreen { align-items: stretch; justify-content: stretch; }
+#gameCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+.game-hud {
+  position: absolute;
+  z-index: 5;
+  top: max(12px, env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 14px;
+  pointer-events: none;
+  font-family: "Trebuchet MS", sans-serif;
+  font-weight: bold;
+  color: #fff5ff;
+  text-shadow: 2px 2px #c34c9e;
+}
+.heartsleft {
+  font-size: clamp(1rem, 3vw, 1.6rem);
+  letter-spacing: 2px;
+  max-width: 55vw;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.score { font-size: clamp(1.1rem, 3vw, 1.7rem); white-space: nowrap; }
+.pause {
+  pointer-events: auto;
+  border-radius: 16px;
+  padding: .35rem .7rem;
+  box-shadow: 0 3px #d86db4;
+  font-size: 1.35rem;
+}
+.game-caption {
+  position: absolute;
+  z-index: 4;
+  bottom: max(8px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 94vw;
+  border: 2px solid #ffd7f1;
+  background: #ffe9f6df;
+  border-radius: 28px;
+  padding: .45rem 1.2rem;
+  color: #a64d9d;
+  font-weight: bold;
+  box-shadow: 0 0 18px #fff;
+}
+.game-caption strong { display: block; font-size: 1.2rem; }
+.game-caption span { font-size: .86rem; }
+
+.zooming { animation: cameraZoom .95s cubic-bezier(.16,.78,.25,1) forwards; }
+@keyframes cameraZoom {
+  0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+  65% { opacity: 1; filter: brightness(1.15); }
+  100% { transform: scale(1.75); opacity: 0; filter: brightness(1.3); }
+}
+.game-enter { animation: gameReveal .85s cubic-bezier(.16,.78,.25,1) both; }
+@keyframes gameReveal {
+  0% { transform: scale(.72); opacity: 0; filter: blur(8px); }
+  70% { transform: scale(1.025); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
+}
+.quiz-card { max-height: 88dvh; overflow: auto; }
+.options { display: grid; grid-template-columns: 1fr; gap: .7rem; margin-top: 1rem; }
+.options button { width: 100%; border-radius: 18px; text-align: center; }
+.qnum { font-weight: bold; color: #b44d9e; margin-bottom: .5rem; }
+.wrong {
+  background: linear-gradient(135deg, #f83f67, #a20d39);
+  color: #fff;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.wrong h1 {
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: clamp(1.8rem, 7vw, 4.3rem);
+  color: white;
+  text-shadow: 3px 3px #7d123e;
+}
+.letter-paper {
+  background: repeating-linear-gradient(to bottom, #fff9ff 0, #fff9ff 31px, #e9b8e9 32px);
+  border: 3px solid #f6b4e0;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: left;
+  min-height: 170px;
+  line-height: 32px;
+  box-shadow: 0 0 0 5px #ffe3f7;
+}
+.letter-paper textarea {
+  width: 100%;
+  min-height: 155px;
+  resize: vertical;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #7e438f;
+  font: 1rem/32px Georgia, serif;
+}
+.audio-row { margin-top: 1rem; }
+#pauseOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: #593d7bbd;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#pauseOverlay .panel { background: #fff0f7; }
+.hidden { display: none !important; }
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING PAGE -->
+<section class="screen active" id="openingScreen">
+  <div class="panel">
+    <div class="ornament">♡ ✦ ♡ ✦ ♡</div>
+    <h1>HIII CHELLAMMM😝😝😛</h1>
+    <p>Heres our love website 🤤🤤🤤😛😛</p>
+    <p>Are u readdyyyy💝💝👀👀👅</p>
+    <div class="btnrow">
+      <button onclick="goToTitle()">ENTER OUR LITTLE WORLD 💝</button>
+    </div>
+    <p class="small" style="margin:1.2rem 0 0">♡ made with love, just for u ♡</p>
+  </div>
+</section>
+
+<!-- TITLE SCREEN -->
+<section class="screen" id="titleScreen">
+  <img class="art" src="assets/title-screen.png" alt="Cupid's Quest title artwork">
+  <div class="shade"></div>
+  <div class="panel">
+    <div class="ornament">♡ 🪽 ♡</div>
+    <p class="small">CUPID'S QUEST</p>
+    <h1>OUR HEART GAME</h1>
+    <p>Catch rika's falling hearts to unlock the next level👅👀😝🤤🥰😛</p>
+    <div class="btnrow">
+      <button onclick="startZoom()">OPEN &amp; PLAY 💝</button>
+    </div>
+  </div>
+</section>
+
+<!-- GAME SCREEN -->
+<section class="screen" id="gameScreen">
+  <img class="art" src="assets/game-scene.png" alt="Cupid's heart-catching game scene">
+  <div class="shade"></div>
+  <canvas id="gameCanvas" aria-label="Tap the falling hearts to catch them"></canvas>
+  <div class="game-hud">
+    <div class="heartsleft" id="heartProgress">♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="score" id="scoreDisplay">💗 x 0</div>
+      <button class="pause" onclick="togglePause()" aria-label="Pause game">Ⅱ</button>
+    </div>
+  </div>
+  <div class="game-caption">
+    <strong>saruuu😩😩</strong>
+    <span>(ys ilmoan so what😛)</span>
+  </div>
+  <div id="pauseOverlay">
+    <div class="panel">
+      <h2>PAUSED 💝</h2>
+      <p>your rika hearts are waiting 😛</p>
+      <button onclick="togglePause()">CONTINUE 💗</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ SCREEN -->
+<section class="screen" id="quizScreen">
+  <div class="panel quiz-card">
+    <div class="ornament">💝 ✧ 💝</div>
+    <div class="qnum" id="questionNumber">QUESTION 1 OF 9</div>
+    <h2 id="questionText"></h2>
+    <div class="options" id="answerOptions"></div>
+  </div>
+</section>
+
+<!-- WRONG ANSWER SCREEN -->
+<section class="screen wrong" id="wrongScreen">
+  <h1>THAPPA SOLRIYAAAA SUNNI 🤬🤬</h1>
+  <button onclick="retryQuestion()">Do again😒</button>
+</section>
+
+<!-- LETTER SCREEN -->
+<section class="screen" id="letterScreen">
+  <div class="panel" style="max-height:94dvh;overflow:auto">
+    <div class="ornament">💝 💌 💝</div>
+    <h2>YOU UNLOCKED MY LETTER 💌</h2>
+    <h2>astro my love 💙💗</h2>
+    <p class="small">💙💗 💙💗 💙💗</p>
+    <div class="letter-paper">
+      <textarea id="letterText" aria-label="Your love letter" placeholder="Write your letter here, my love... 💗"></textarea>
+    </div>
+    <div class="btnrow">
+      <button onclick="saveLetter()">SAVE LETTER ON THIS DEVICE 💗</button>
+    </div>
+    <div class="audio-row">
+      <p class="small">A little voice message for u 💝</p>
+      <audio id="voiceAudio" controls loop preload="none" style="width:100%">
+        <source src="voice-message.mp3" type="audio/mpeg">
+        Your browser does not support audio.
+      </audio>
+    </div>
+  </div>
+</section>
+<script>
+/* SCREEN CONTROL */
+const screens = document.querySelectorAll(".screen");
+
+function showScreen(id) {
+  screens.forEach(screen => screen.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function goToTitle() {
+  showScreen("titleScreen");
+}
+
+/* CAMERA ZOOM INTO GAME */
+let zoomStarted = false;
+
+function startZoom() {
+  if (zoomStarted) return;
+  zoomStarted = true;
+
+  const title = document.getElementById("titleScreen");
+  title.classList.add("zooming");
+
+  setTimeout(() => {
+    title.classList.remove("zooming");
+    showScreen("gameScreen");
+
+    const game = document.getElementById("gameScreen");
+    game.classList.remove("game-enter");
+    void game.offsetWidth;
+    game.classList.add("game-enter");
+
+    resizeCanvas();
+    resetGame();
+  }, 850);
+}
+
+/* HEART-CATCHING GAME */
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let gameWidth = 0;
+let gameHeight = 0;
+let hearts = [];
+let score = 0;
+let gameRunning = false;
+let paused = false;
+let lastFrame = 0;
+let spawnTimer = 0;
+let animationId = null;
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  gameWidth = rect.width;
+  gameHeight = rect.height;
+
+  canvas.width = Math.round(gameWidth * dpr);
+  canvas.height = Math.round(gameHeight * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawGame();
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+function resetGame() {
+  if (animationId) cancelAnimationFrame(animationId);
+
+  score = 0;
+  hearts = [];
+  spawnTimer = 0;
+  lastFrame = 0;
+  paused = false;
+  gameRunning = true;
+
+  document.getElementById("pauseOverlay").style.display = "none";
+  updateHUD();
+
+  for (let i = 0; i < 5; i++) {
+    hearts.push({
+      x: gameWidth * (0.12 + Math.random() * 0.76),
+      y: -Math.random() * gameHeight,
+      speed: 65 + Math.random() * 65,
+      size: 25 + Math.random() * 9,
+      caught: false
+    });
+  }
+
+  animationId = requestAnimationFrame(gameLoop);
+}
+
+function updateHUD() {
+  document.getElementById("scoreDisplay").textContent = "💗 x " + score;
+
+  const remaining = Math.max(0, 10 - score);
+  document.getElementById("heartProgress").textContent =
+    "♥ ".repeat(10 - remaining) + "♡ ".repeat(remaining);
+}
+
+function drawGame() {
+  if (!gameWidth || !gameHeight) return;
+
+  ctx.clearRect(0, 0, gameWidth, gameHeight);
+
+  // Soft glow behind the falling hearts.
+  const glow = ctx.createRadialGradient(
+    gameWidth / 2, gameHeight / 2, 10,
+    gameWidth / 2, gameHeight / 2, Math.max(gameWidth, gameHeight) * 0.75
+  );
+
+  glow.addColorStop(0, "rgba(255,220,249,0.12)");
+  glow.addColorStop(1, "rgba(119,75,190,0.18)");
+
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, gameWidth, gameHeight);
+
+  hearts.forEach(heart => {
+    if (heart.caught) return;
+
+    ctx.save();
+    ctx.font = `bold ${heart.size}px Georgia`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.shadowColor = "#ff8bd5";
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = "#ffb0df";
+    ctx.fillText("♥", heart.x, heart.y);
+
+    ctx.shadowBlur = 0;
+    ctx.font = `bold ${Math.max(10, heart.size * 0.35)}px Trebuchet MS`;
+    ctx.fillStyle = "#fff";
+    ctx.fillText("rika", heart.x, heart.y + heart.size * 0.6);
+    ctx.restore();
+  });
+}
+
+function gameLoop(timestamp) {
+  if (!gameRunning) return;
+
+  if (!lastFrame) lastFrame = timestamp;
+
+  const delta = Math.min((timestamp - lastFrame) / 1000, 0.04);
+  lastFrame = timestamp;
+
+  if (!paused) {
+    spawnTimer += delta;
+
+    if (spawnTimer > 0.85 && hearts.filter(h => !h.caught).length < 7) {
+      spawnTimer = 0;
+      hearts.push({
+        x: 25 + Math.random() * Math.max(1, gameWidth - 50),
+        y: -35,
+        speed: 80 + Math.random() * 95,
+        size: 25 + Math.random() * 9,
+        caught: false
+      });
+    }
+
+    hearts.forEach(heart => {
+      if (!heart.caught) heart.y += heart.speed * delta;
+    });
+
+    hearts = hearts.filter(heart => heart.y < gameHeight + 50);
+
+    drawGame();
+  }
+
+  animationId = requestAnimationFrame(gameLoop);
+}
+
+function catchHeart(event) {
+  if (!gameRunning || paused) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  // Catch the closest heart near the tap.
+  let chosen = null;
+  let bestDistance = Infinity;
+
+  hearts.forEach(heart => {
+    if (heart.caught) return;
+
+    const distance = Math.hypot(heart.x - x, heart.y - y);
+
+    if (distance < Math.max(38, heart.size * 1.6) &&
+        distance < bestDistance) {
+      chosen = heart;
+      bestDistance = distance;
+    }
+  });
+
+  if (!chosen) return;
+
+  chosen.caught = true;
+  score++;
+  updateHUD();
+
+  if (score >= 10) {
+    gameRunning = false;
+    if (animationId) cancelAnimationFrame(animationId);
+
+    setTimeout(() => {
+      showScreen("quizScreen");
+      renderQuestion();
+    }, 350);
+
+    return;
+  }
+
+  drawGame();
+}
+
+canvas.addEventListener("pointerdown", catchHeart);
+
+function togglePause() {
+  if (!gameRunning) return;
+
+  paused = !paused;
+  document.getElementById("pauseOverlay").style.display =
+    paused ? "flex" : "none";
+
+  if (!paused) {
+    lastFrame = 0;
+  }
+}
+
+/* ALL NINE QUIZ QUESTIONS */
+const questions = [
+  {
+    question: "do u love me",
+    options: ["Yes", "Yes", "So much"],
+    correct: 2
+  },
+  {
+    question: "would u love me even if I make u mad sometimes",
+    options: ["Idk", "Yes", "No"],
+    correct: 1
+  },
+  {
+    question: "would u marry me even if I make u mad sometimes",
+    options: ["Yes", "No"],
+    correct: 0
+  },
+  {
+    question: "would u stay by my side no matter what happens",
+    options: ["Yes", "Yes", "Yes"],
+    correct: 0
+  },
+  {
+    question: "would u love me no matter whathappens",
+    options: ["Yes", "Yes"],
+    correct: 0
+  },
+  {
+    question: "wil u promise to never give up on us",
+    options: ["Yes my baby", "Yes"],
+    correct: 0
+  },
+  {
+    question: "will u always come and reachout even if we fight",
+    options: ["Yes", "I try 😒"],
+    correct: 0
+  },
+  {
+    question: "wil u cuddle w me all my life",
+    options: ["Yesss😝", "Yess"],
+    correct: 0
+  },
+  {
+    question: "Would u hold my hand and tell me things are alright even if it isn't 😢",
+    options: ["Yes", "No"],
+    correct: 0
+  }
+];
+
+let questionIndex = 0;
+
+function renderQuestion() {
+  const question = questions[questionIndex];
+
+  document.getElementById("questionNumber").textContent =
+    `QUESTION ${questionIndex + 1} OF ${questions.length}`;
+
+  document.getElementById("questionText").textContent = question.question;
+
+  const optionsBox = document.getElementById("answerOptions");
+  optionsBox.innerHTML = "";
+
+  question.options.forEach((option, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = option;
+    button.addEventListener("click", () => checkAnswer(index));
+    optionsBox.appendChild(button);
+  });
+}
+
+function checkAnswer(selectedIndex) {
+  const question = questions[questionIndex];
+
+  if (selectedIndex !== question.correct) {
+    showScreen("wrongScreen");
+    return;
+  }
+
+  questionIndex++;
+
+  if (questionIndex >= questions.length) {
+    showScreen("letterScreen");
+    return;
+  }
+
+  renderQuestion();
+}
+
+function retryQuestion() {
+  // Keep the same question and its answer options.
+  showScreen("quizScreen");
+  renderQuestion();
+}
+
+/* LETTER: SAVE THE TEXT THE RECIPIENT WRITES */
+const letterText = document.getElementById("letterText");
+
+try {
+  letterText.value = localStorage.getItem("cupidsQuestLetter") || "";
+} catch (error) {
+  // The letter can still be edited if storage is unavailable.
+}
+
+function saveLetter() {
+  try {
+    localStorage.setItem("cupidsQuestLetter", letterText.value);
+    alert("Letter saved on this device 💗");
+  } catch (error) {
+    alert("Your letter is still here for now 💗 Keep a copy before leaving this page!");
+  }
+}
+</script>
+
+</body>
+</html>
