@@ -1854,4 +1854,26 @@ function checkAnswer(selectedIndex) {
   const question = questions[questionIndex];
   if (!question) return;
 
-  if
+  if (selectedIndex !== question.correct) {
+    showScreen("wrongScreen");
+    return;
+  }
+
+  questionIndex++;
+
+  if (questionIndex >= questions.length) {
+    openLetterWithSuperZoom();
+    return;
+  }
+
+  renderQuestion();
+}
+
+function retryQuestion() {
+  showScreen("quizScreen");
+  renderQuestion();
+}
+</script>
+
+</body>
+</html>
