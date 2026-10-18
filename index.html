@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -292,6 +291,30 @@ p {
     linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.45)),
     url("sky.jpg") center center / cover no-repeat;
   background-attachment: fixed;
+}
+
+/* QUIZ ZOOMS FORWARD AFTER THE HEART SPLITS */
+
+#quizScreen.quiz-zoom-in {
+  animation: quizZoomIn .85s cubic-bezier(.16,.78,.25,1) both;
+}
+
+@keyframes quizZoomIn {
+  0% {
+    transform: scale(.55);
+    opacity: .25;
+    filter: blur(5px);
+  }
+  70% {
+    transform: scale(1.025);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+  }
 }
 
 #wrongScreen, #letterScreen { z-index: 4; }
@@ -785,7 +808,7 @@ p {
 
 .hidden { display: none !important; }
 
-/* NEW MAGICAL TRANSITION OVERLAY */
+/* FULL-SCREEN HEART TEAR TRANSITION */
 
 #magicTransition {
   position: fixed;
@@ -815,8 +838,28 @@ p {
   background: radial-gradient(circle at center, #70357f 0%, #2a123b 48%, #100719 100%);
 }
 
+/*
+  The base image stays completely still.
+  The two matching copies sit above it and tear away.
+  This helps keep the baked-in background from moving with the heart halves.
+*/
+
+.heart-base {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  user-select: none;
+  pointer-events: none;
+}
+
 .heart-glow {
   position: absolute;
+  z-index: 1;
   left: 50%;
   top: 50%;
   width: min(72vw, 430px);
@@ -826,25 +869,34 @@ p {
   background: #ff8fce35;
   box-shadow: 0 0 45px 20px #ff8fce66, 0 0 100px 35px #d6a0ff55;
   animation: heartGlow 1.35s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 
 .heart-half {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: min(75vw, 450px);
-  height: min(75vw, 450px);
-  object-fit: contain;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transform: translateX(0);
   filter: drop-shadow(0 0 20px #ff9bdc);
+  user-select: none;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
-#heartLeft { clip-path: inset(0 50% 0 0); }
-#heartRight { clip-path: inset(0 0 0 50%); }
-
-#heartScene.heart-zoom {
-  animation: zoomIntoHeart 1.1s cubic-bezier(.12,.8,.2,1) forwards;
+#heartLeft {
+  clip-path: inset(0 50% 0 0);
 }
+
+#heartRight {
+  clip-path: inset(0 0 0 50%);
+}
+
+/* Split immediately; there is NO preliminary zoom on the heart scene. */
 
 #heartScene.heart-split #heartLeft {
   animation: splitLeft 1.2s cubic-bezier(.2,.8,.2,1) forwards;
@@ -859,16 +911,14 @@ p {
   to { opacity: 1; scale: 1.08; }
 }
 
-@keyframes zoomIntoHeart {
-  to { transform: scale(3.5); opacity: 0; }
-}
-
 @keyframes splitLeft {
-  to { transform: translate(calc(-50% - 65vw), -50%) rotate(-12deg); opacity: 0; }
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-105%); opacity: 0; }
 }
 
 @keyframes splitRight {
-  to { transform: translate(calc(-50% + 65vw), -50%) rotate(12deg); opacity: 0; }
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(105%); opacity: 0; }
 }
 
 .magic-sparkle {
@@ -1003,11 +1053,16 @@ p {
 
 <body>
 
-<!-- NEW MAGICAL TRANSITION OVERLAY -->
+<!-- MAGICAL TRANSITION OVERLAY -->
 <div id="magicTransition" aria-hidden="true">
   <div id="heartScene">
+
+    <!-- Stationary full-screen background layer -->
+    <img class="heart-base" src="magic-heart.png" alt="">
+
     <div class="heart-glow"></div>
 
+    <!-- These two full-screen copies tear apart in opposite directions -->
     <img id="heartLeft" class="heart-half" src="magic-heart.png" alt="">
     <img id="heartRight" class="heart-half" src="magic-heart.png" alt="">
 
@@ -1547,7 +1602,12 @@ function catchHeart(event) {
 
 canvas.addEventListener("pointerdown", catchHeart, { passive: false });
 
-/* NEW: GAME FINISHES -> ZOOM INTO GLOWING HEART -> HEART SPLITS -> QUIZ */
+/*
+  GAME FINISHES -> FULL-SCREEN HEART TEARS APART
+  -> QUIZ ZOOMS FORWARD.
+
+  The heart does not zoom into the middle before splitting.
+*/
 
 function finishGame() {
   if (!gameRunning) return;
@@ -1560,42 +1620,79 @@ function finishGame() {
     animationId = null;
   }
 
+  if (finishTimer !== null) {
+    clearTimeout(finishTimer);
+    finishTimer = null;
+  }
+
   document.getElementById("pauseOverlay").style.display = "none";
 
   const thisSession = gameSession;
   const overlay = document.getElementById("magicTransition");
   const heartScene = document.getElementById("heartScene");
   const portalScene = document.getElementById("portalScene");
+  const quizScreen = document.getElementById("quizScreen");
 
   overlay.classList.add("active");
   overlay.setAttribute("aria-hidden", "false");
 
-  heartScene.classList.remove("heart-zoom", "heart-split", "hidden");
+  /* Reset transition layers before starting a new animation. */
+  heartScene.classList.remove("heart-split", "hidden");
   portalScene.classList.add("hidden");
   portalScene.classList.remove("portal-zoom");
 
+  const heartLeft = document.getElementById("heartLeft");
+  const heartRight = document.getElementById("heartRight");
+
+  heartLeft.style.animation = "none";
+  heartRight.style.animation = "none";
+  heartLeft.style.transform = "translateX(0)";
+  heartRight.style.transform = "translateX(0)";
+  heartLeft.style.opacity = "1";
+  heartRight.style.opacity = "1";
+
+  quizScreen.classList.remove("quiz-zoom-in");
+
+  /* Force the browser to reset the heart-half animations. */
   void heartScene.offsetWidth;
-  heartScene.classList.add("heart-zoom");
+
+  heartLeft.style.animation = "";
+  heartRight.style.animation = "";
+
+  /* Start the vertical tear immediately, while the base image stays still. */
+  heartScene.classList.add("heart-split");
 
   finishTimer = setTimeout(() => {
     if (thisSession !== gameSession) return;
 
-    heartScene.classList.remove("heart-zoom");
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+
+    heartScene.classList.remove("heart-split");
+
+    /* Reset both halves so the transition is ready if needed again. */
+    heartLeft.style.animation = "none";
+    heartRight.style.animation = "none";
+    heartLeft.style.transform = "translateX(0)";
+    heartRight.style.transform = "translateX(0)";
+    heartLeft.style.opacity = "1";
+    heartRight.style.opacity = "1";
+
     void heartScene.offsetWidth;
-    heartScene.classList.add("heart-split");
 
-    finishTimer = setTimeout(() => {
-      if (thisSession !== gameSession) return;
+    heartLeft.style.animation = "";
+    heartRight.style.animation = "";
 
-      overlay.classList.remove("active");
-      overlay.setAttribute("aria-hidden", "true");
-      heartScene.classList.remove("heart-zoom", "heart-split");
+    showScreen("quizScreen");
 
-      showScreen("quizScreen");
-      renderQuestion();
-      finishTimer = null;
-    }, 1200);
-  }, 1100);
+    /* Zoom the quiz forward only after the heart has split. */
+    quizScreen.classList.remove("quiz-zoom-in");
+    void quizScreen.offsetWidth;
+    quizScreen.classList.add("quiz-zoom-in");
+
+    renderQuestion();
+    finishTimer = null;
+  }, 1200);
 }
 
 function togglePause() {
@@ -1666,7 +1763,7 @@ const questions = [
 let questionIndex = 0;
 
 /*
-  NEW: QUIZ FINISHES -> PORTAL APPEARS -> ZOOM INTO ITS CENTRE
+  QUIZ FINISHES -> PORTAL APPEARS -> ZOOM INTO ITS CENTRE
   -> THE REAL LETTER FILLS THE SCREEN.
   No extra transition runs after the real letter appears.
 */
@@ -1691,7 +1788,7 @@ function openLetterWithSuperZoom() {
   overlay.setAttribute("aria-hidden", "false");
 
   heartScene.classList.add("hidden");
-  heartScene.classList.remove("heart-zoom", "heart-split");
+  heartScene.classList.remove("heart-split");
 
   portalScene.classList.remove("hidden");
   portalScene.classList.remove("portal-zoom");
@@ -1716,7 +1813,7 @@ function openLetterWithSuperZoom() {
 
     portalScene.classList.add("hidden");
     portalScene.classList.remove("portal-zoom");
-    heartScene.classList.remove("hidden", "heart-zoom", "heart-split");
+    heartScene.classList.remove("hidden", "heart-split");
 
     showScreen("letterScreen");
 
@@ -1757,26 +1854,4 @@ function checkAnswer(selectedIndex) {
   const question = questions[questionIndex];
   if (!question) return;
 
-  if (selectedIndex !== question.correct) {
-    showScreen("wrongScreen");
-    return;
-  }
-
-  questionIndex++;
-
-  if (questionIndex >= questions.length) {
-    openLetterWithSuperZoom();
-    return;
-  }
-
-  renderQuestion();
-}
-
-function retryQuestion() {
-  showScreen("quizScreen");
-  renderQuestion();
-}
-</script>
-
-</body>
-</html>
+  if
