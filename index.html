@@ -1096,7 +1096,8 @@ p {
     <p class="intro-subtitle">Enter a world just for us</p>
     <p class="intro-goodluck">Goodluck</p>
 
-    <button id="startButton" class="start-button" type="button">START</button>
+    <!-- FIX: ENTER now directly calls beginOpening() -->
+    <button id="startButton" class="start-button" type="button" onclick="beginOpening()">ENTER</button>
 
     <div id="loadingArea" class="loading-area" aria-live="polite">
       <div id="loadingLabel" class="loading-label">LOADING...</div>
@@ -1255,7 +1256,7 @@ function showScreen(id) {
   if (target) target.classList.add("active");
 }
 
-/* OPENING VIDEO + START + LOADING */
+/* FIXED OPENING BUTTON + LOADING */
 
 const introVideo = document.getElementById("introVideo");
 const startButton = document.getElementById("startButton");
@@ -1266,18 +1267,46 @@ const loadingSegments = Array.from(document.querySelectorAll(".loading-segment")
 let introStarted = false;
 let loadingTimer = null;
 
-startButton.addEventListener("click", () => {
+function beginOpening() {
   if (introStarted) return;
 
   introStarted = true;
+
   startButton.disabled = true;
   startButton.textContent = "PLEASE WAIT";
   loadingArea.classList.add("visible");
   loadingLabel.textContent = "LOADING...";
 
-  introVideo.play().catch(() => {});
+  /* The video is optional for the screen transition.
+     Even if video playback fails, ENTER will still work. */
+  if (introVideo) {
+    try {
+      const playPromise = introVideo.play();
+
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+    } catch (error) {
+      /* Continue to the next screen even if video playback fails. */
+    }
+  }
 
   let progress = 0;
+
+  function enterTitleScreen() {
+    if (loadingTimer !== null) {
+      clearInterval(loadingTimer);
+      loadingTimer = null;
+    }
+
+    loadingLabel.textContent = "READY";
+    showScreen("titleScreen");
+  }
+
+  if (loadingSegments.length === 0) {
+    enterTitleScreen();
+    return;
+  }
 
   loadingTimer = setInterval(() => {
     if (progress < loadingSegments.length) {
@@ -1286,14 +1315,10 @@ startButton.addEventListener("click", () => {
     }
 
     if (progress >= loadingSegments.length) {
-      clearInterval(loadingTimer);
-      loadingTimer = null;
-      loadingLabel.textContent = "READY";
-
-      setTimeout(() => showScreen("titleScreen"), 180);
+      enterTitleScreen();
     }
   }, 115);
-});
+}
 
 /* TITLE TRANSITION */
 
