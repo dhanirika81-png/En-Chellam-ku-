@@ -150,20 +150,34 @@ button:focus-visible {
   font-size: clamp(2rem, 6vw, 3.8rem);
 }
 
+/* UPDATED START BUTTON: TRANSPARENT + GLOWING OUTLINE */
+
 .start-button {
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: #fff;
-  padding: 10px 24px;
-  box-shadow: none;
+  font-family: var(--gothic);
+  font-weight: normal;
   font-size: clamp(2rem, 6vw, 3.2rem);
-  text-shadow: 2px 3px #000, 0 0 12px #fff;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 0;
+  padding: 12px 34px;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 12px #fff,
+    0 0 22px #d8c5ff;
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.55),
+    inset 0 0 8px rgba(255, 255, 255, 0.08);
+  transition: box-shadow .3s ease, transform .3s ease;
 }
 
 .start-button:hover {
-  transform: scale(1.07);
-  filter: brightness(1.2);
+  background: transparent;
+  box-shadow:
+    0 0 12px #fff,
+    0 0 25px #d8c5ff,
+    0 0 40px #d8c5ff;
+  transform: scale(1.05);
 }
 
 .start-button:active {
@@ -171,7 +185,7 @@ button:focus-visible {
 }
 
 .start-button:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid #fff;
   outline-offset: 5px;
 }
 
@@ -309,7 +323,20 @@ p {
   touch-action: none;
 }
 
-#quizScreen, #wrongScreen, #letterScreen {
+/* UPDATED QUIZ SCREEN: YOUR SKY PHOTO BEHIND EVERY QUESTION */
+
+#quizScreen {
+  z-index: 4;
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.45)
+    ),
+    url("sky.jpg") center center / cover no-repeat;
+  background-attachment: fixed;
+}
+
+#wrongScreen, #letterScreen {
   z-index: 4;
 }
 
@@ -488,13 +515,18 @@ p {
   }
 }
 
-/* QUIZ */
+/* QUIZ CARD */
 
 .quiz-card {
   max-height: 88dvh;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  background: rgba(255, 240, 247, 0.82);
+  border: 2px solid #fff;
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.7),
+    0 0 28px rgba(255, 182, 226, 0.65);
 }
 
 .options {
@@ -891,6 +923,12 @@ p {
 @keyframes popRing {
   0% { transform: scale(.2); opacity: 1; }
   100% { transform: scale(1.5); opacity: 0; }
+}
+
+@media (max-width: 600px) {
+  #quizScreen {
+    background-attachment: scroll;
+  }
 }
 
 @media (max-width: 480px) {
