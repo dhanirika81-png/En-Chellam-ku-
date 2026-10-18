@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#050505">
-<title>Cupid's Quest 💝</title>
+<title>sarudhani Cupid's Quest 💝</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -127,10 +127,7 @@ button:focus-visible {
   font-family: var(--gothic);
   font-weight: normal;
   color: #fff;
-  text-shadow:
-    2px 3px 0 #000,
-    0 0 4px #000,
-    0 0 15px #fff;
+  text-shadow: 2px 3px 0 #000, 0 0 4px #000, 0 0 15px #fff;
 }
 
 .intro-title {
@@ -150,39 +147,25 @@ button:focus-visible {
   font-size: clamp(2rem, 6vw, 3.8rem);
 }
 
-/* UPDATED START BUTTON: TRANSPARENT + GLOWING OUTLINE */
-
 .start-button {
-  font-family: var(--gothic);
-  font-weight: normal;
   font-size: clamp(2rem, 6vw, 3.2rem);
   color: #fff;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255,255,255,.9);
   border-radius: 0;
   padding: 12px 34px;
-  text-shadow:
-    0 0 5px #fff,
-    0 0 12px #fff,
-    0 0 22px #d8c5ff;
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.55),
-    inset 0 0 8px rgba(255, 255, 255, 0.08);
+  text-shadow: 0 0 5px #fff, 0 0 12px #fff, 0 0 22px #d8c5ff;
+  box-shadow: 0 0 8px #ffffff8c, inset 0 0 8px #ffffff14;
   transition: box-shadow .3s ease, transform .3s ease;
 }
 
 .start-button:hover {
   background: transparent;
-  box-shadow:
-    0 0 12px #fff,
-    0 0 25px #d8c5ff,
-    0 0 40px #d8c5ff;
+  box-shadow: 0 0 12px #fff, 0 0 25px #d8c5ff, 0 0 40px #d8c5ff;
   transform: scale(1.05);
 }
 
-.start-button:active {
-  transform: scale(.98);
-}
+.start-button:active { transform: scale(.98); }
 
 .start-button:focus-visible {
   outline: 2px solid #fff;
@@ -195,9 +178,7 @@ button:focus-visible {
   display: none;
 }
 
-.loading-area.visible {
-  display: block;
-}
+.loading-area.visible { display: block; }
 
 .loading-label {
   color: #fff;
@@ -221,9 +202,7 @@ button:focus-visible {
   min-width: 0;
 }
 
-.loading-segment.filled {
-  background: #fff;
-}
+.loading-segment.filled { background: #fff; }
 
 #startButton:disabled {
   cursor: default;
@@ -247,12 +226,7 @@ button:focus-visible {
 .shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    #5e42a51a,
-    #ffb1df16 65%,
-    #4a2e6c20
-  );
+  background: linear-gradient(180deg, #5e42a51a, #ffb1df16 65%, #4a2e6c20);
   pointer-events: none;
 }
 
@@ -269,9 +243,7 @@ button:focus-visible {
   backdrop-filter: blur(4px);
 }
 
-h1, h2, p {
-  margin-top: 0;
-}
+h1, h2, p { margin-top: 0; }
 
 h1 {
   font-size: clamp(2rem, 6vw, 4rem);
@@ -279,9 +251,7 @@ h1 {
   text-shadow: 2px 3px #ffd3ef, 0 0 16px white;
 }
 
-h2 {
-  font-size: clamp(1.5rem, 4.5vw, 2.5rem);
-}
+h2 { font-size: clamp(1.5rem, 4.5vw, 2.5rem); }
 
 p {
   font-size: clamp(1rem, 2.7vw, 1.25rem);
@@ -289,9 +259,7 @@ p {
   overflow-wrap: anywhere;
 }
 
-.small {
-  font-size: .92rem;
-}
+.small { font-size: .92rem; }
 
 .btnrow {
   display: flex;
@@ -307,13 +275,8 @@ p {
   margin-bottom: .65rem;
 }
 
-#titleScreen {
-  z-index: 1;
-}
-
-#previewScreen {
-  z-index: 2;
-}
+#titleScreen { z-index: 1; }
+#previewScreen { z-index: 2; }
 
 #gameScreen {
   z-index: 3;
@@ -323,27 +286,18 @@ p {
   touch-action: none;
 }
 
-/* UPDATED QUIZ SCREEN: YOUR SKY PHOTO BEHIND EVERY QUESTION */
-
 #quizScreen {
   z-index: 4;
   background:
-    linear-gradient(
-      rgba(0, 0, 0, 0.25),
-      rgba(0, 0, 0, 0.45)
-    ),
+    linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.45)),
     url("sky.jpg") center center / cover no-repeat;
   background-attachment: fixed;
 }
 
-#wrongScreen, #letterScreen {
-  z-index: 4;
-}
+#wrongScreen, #letterScreen { z-index: 4; }
 
 #titleScreen .panel,
-#previewScreen .panel {
-  background: #fff0f7e8;
-}
+#previewScreen .panel { background: #fff0f7e8; }
 
 /* GAME SCENE */
 
@@ -362,12 +316,7 @@ p {
 }
 
 #gameScreen .shade {
-  background: linear-gradient(
-    180deg,
-    #43205a26 0%,
-    #5d317c05 38%,
-    #3e1a6520 100%
-  );
+  background: linear-gradient(180deg, #43205a26 0%, #5d317c05 38%, #3e1a6520 100%);
 }
 
 #gameCanvas {
@@ -461,58 +410,25 @@ p {
   pointer-events: none;
 }
 
-.game-caption strong {
-  display: block;
-  font-size: 1.2rem;
-}
-
-.game-caption span {
-  font-size: .86rem;
-}
+.game-caption strong { display: block; font-size: 1.2rem; }
+.game-caption span { font-size: .86rem; }
 
 /* EXISTING GAME TRANSITION */
 
-.zooming {
-  animation: cameraZoom .95s cubic-bezier(.16,.78,.25,1) forwards;
-}
+.zooming { animation: cameraZoom .95s cubic-bezier(.16,.78,.25,1) forwards; }
 
 @keyframes cameraZoom {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-    filter: brightness(1);
-  }
-  65% {
-    opacity: 1;
-    filter: brightness(1.15);
-  }
-  100% {
-    transform: scale(1.75);
-    opacity: 0;
-    filter: brightness(1.3);
-  }
+  0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+  65% { opacity: 1; filter: brightness(1.15); }
+  100% { transform: scale(1.75); opacity: 0; filter: brightness(1.3); }
 }
 
-.game-enter {
-  animation: gameReveal .85s cubic-bezier(.16,.78,.25,1) both;
-}
+.game-enter { animation: gameReveal .85s cubic-bezier(.16,.78,.25,1) both; }
 
 @keyframes gameReveal {
-  0% {
-    transform: scale(.88);
-    opacity: 0;
-    filter: blur(5px);
-  }
-  70% {
-    transform: scale(1.015);
-    opacity: 1;
-    filter: blur(0);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-    filter: blur(0);
-  }
+  0% { transform: scale(.88); opacity: 0; filter: blur(5px); }
+  70% { transform: scale(1.015); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1); opacity: 1; filter: blur(0); }
 }
 
 /* QUIZ CARD */
@@ -522,11 +438,9 @@ p {
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  background: rgba(255, 240, 247, 0.82);
+  background: rgba(255,240,247,.82);
   border: 2px solid #fff;
-  box-shadow:
-    0 0 12px rgba(255, 255, 255, 0.7),
-    0 0 28px rgba(255, 182, 226, 0.65);
+  box-shadow: 0 0 12px #ffffffb3, 0 0 28px #ffb6e2a6;
 }
 
 .options {
@@ -569,8 +483,7 @@ p {
 /* LOVE LETTER */
 
 #letterScreen {
-  padding: max(12px, env(safe-area-inset-top)) 12px
-           max(12px, env(safe-area-inset-bottom));
+  padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
   transform-origin: center center;
 }
 
@@ -584,22 +497,18 @@ p {
   padding: clamp(.9rem, 3vw, 1.6rem);
 }
 
-/* THE ONLY LETTER TRANSITION: EXTREME ZOOM IN */
+/* FINAL SUPER-ZOOM INTO THE REAL LETTER */
 
 #letterScreen.letter-zoom {
   animation: letterSuperZoom 1.15s cubic-bezier(.12,.82,.18,1) both;
 }
 
 @keyframes letterSuperZoom {
-  from {
-    transform: scale(.015);
-  }
-  to {
-    transform: scale(1);
-  }
+  from { transform: scale(.015); }
+  to { transform: scale(1); }
 }
 
-/* Decorative heart border */
+/* DECORATIVE HEART BORDER */
 
 .heart-border {
   position: relative;
@@ -633,9 +542,7 @@ p {
   animation: heartBob 1.6s ease-in-out infinite;
 }
 
-.heart-border .tiny-heart:nth-child(even) {
-  animation-delay: -.8s;
-}
+.heart-border .tiny-heart:nth-child(even) { animation-delay: -.8s; }
 
 @keyframes heartBob {
   0%, 100% { transform: translateY(0) rotate(-8deg); }
@@ -643,12 +550,7 @@ p {
 }
 
 .letter-paper {
-  background: repeating-linear-gradient(
-    to bottom,
-    #fff9ff 0,
-    #fff9ff 31px,
-    #e9b8e9 32px
-  );
+  background: repeating-linear-gradient(to bottom, #fff9ff 0, #fff9ff 31px, #e9b8e9 32px);
   border: 3px solid #f6b4e0;
   border-radius: 12px;
   padding: 1rem;
@@ -677,17 +579,9 @@ p {
   padding: 1.35rem 1rem 1rem;
   border: 2px solid #ffc4e7;
   border-radius: 27px;
-  background:
-    radial-gradient(ellipse at 50% 0%, #ffffff 0%, transparent 55%),
-    linear-gradient(145deg, #fffaff 0%, #ffe1f3 48%, #f0e2ff 100%);
-  box-shadow:
-    0 7px 0 #e8a0d0,
-    0 12px 22px #d77fc955,
-    0 0 25px #ffbfe9aa,
-    inset 0 0 0 4px #fff8ff;
-  animation:
-    playerFloat 3.6s ease-in-out infinite,
-    playerGlow 3s ease-in-out infinite;
+  background: radial-gradient(ellipse at 50% 0%, #fff 0%, transparent 55%), linear-gradient(145deg, #fffaff 0%, #ffe1f3 48%, #f0e2ff 100%);
+  box-shadow: 0 7px 0 #e8a0d0, 0 12px 22px #d77fc955, 0 0 25px #ffbfe9aa, inset 0 0 0 4px #fff8ff;
+  animation: playerFloat 3.6s ease-in-out infinite, playerGlow 3s ease-in-out infinite;
   transform-origin: center;
 }
 
@@ -722,14 +616,8 @@ p {
 }
 
 @keyframes playerGlow {
-  0%, 100% {
-    box-shadow: 0 7px 0 #e8a0d0, 0 12px 22px #d77fc955,
-                0 0 22px #ffbfe988, inset 0 0 0 4px #fff8ff;
-  }
-  50% {
-    box-shadow: 0 7px 0 #e8a0d0, 0 15px 30px #d77fc977,
-                0 0 35px #ffbfe9dd, inset 0 0 0 4px #fff8ff;
-  }
+  0%, 100% { box-shadow: 0 7px 0 #e8a0d0, 0 12px 22px #d77fc955, 0 0 22px #ffbfe988, inset 0 0 0 4px #fff8ff; }
+  50% { box-shadow: 0 7px 0 #e8a0d0, 0 15px 30px #d77fc977, 0 0 35px #ffbfe9dd, inset 0 0 0 4px #fff8ff; }
 }
 
 @keyframes playerShine {
@@ -801,29 +689,10 @@ p {
   text-shadow: 0 0 8px #ffaddb;
 }
 
-.float-heart:nth-of-type(1) {
-  left: 7%;
-  font-size: 20px;
-  animation-delay: -1s;
-}
-
-.float-heart:nth-of-type(2) {
-  left: 25%;
-  font-size: 13px;
-  animation-delay: -3.1s;
-}
-
-.float-heart:nth-of-type(3) {
-  right: 24%;
-  font-size: 19px;
-  animation-delay: -2s;
-}
-
-.float-heart:nth-of-type(4) {
-  right: 7%;
-  font-size: 14px;
-  animation-delay: -4s;
-}
+.float-heart:nth-of-type(1) { left: 7%; font-size: 20px; animation-delay: -1s; }
+.float-heart:nth-of-type(2) { left: 25%; font-size: 13px; animation-delay: -3.1s; }
+.float-heart:nth-of-type(3) { right: 24%; font-size: 19px; animation-delay: -2s; }
+.float-heart:nth-of-type(4) { right: 7%; font-size: 14px; animation-delay: -4s; }
 
 @keyframes floatUp {
   0% { transform: translateY(0) rotate(0) scale(.7); opacity: 0; }
@@ -914,21 +783,140 @@ p {
   background: #fff0f7;
 }
 
-.hidden {
-  display: none !important;
+.hidden { display: none !important; }
+
+/* NEW MAGICAL TRANSITION OVERLAY */
+
+#magicTransition {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #100719;
+  perspective: 1000px;
 }
 
-/* GAME HEART POP */
+#magicTransition.active { display: flex; }
 
-@keyframes popRing {
-  0% { transform: scale(.2); opacity: 1; }
-  100% { transform: scale(1.5); opacity: 0; }
+#heartScene,
+#portalScene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#heartScene {
+  background: radial-gradient(circle at center, #70357f 0%, #2a123b 48%, #100719 100%);
+}
+
+.heart-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(72vw, 430px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #ff8fce35;
+  box-shadow: 0 0 45px 20px #ff8fce66, 0 0 100px 35px #d6a0ff55;
+  animation: heartGlow 1.35s ease-in-out infinite alternate;
+}
+
+.heart-half {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(75vw, 450px);
+  height: min(75vw, 450px);
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 20px #ff9bdc);
+}
+
+#heartLeft { clip-path: inset(0 50% 0 0); }
+#heartRight { clip-path: inset(0 0 0 50%); }
+
+#heartScene.heart-zoom {
+  animation: zoomIntoHeart 1.1s cubic-bezier(.12,.8,.2,1) forwards;
+}
+
+#heartScene.heart-split #heartLeft {
+  animation: splitLeft 1.2s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+#heartScene.heart-split #heartRight {
+  animation: splitRight 1.2s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes heartGlow {
+  from { opacity: .65; scale: .92; }
+  to { opacity: 1; scale: 1.08; }
+}
+
+@keyframes zoomIntoHeart {
+  to { transform: scale(3.5); opacity: 0; }
+}
+
+@keyframes splitLeft {
+  to { transform: translate(calc(-50% - 65vw), -50%) rotate(-12deg); opacity: 0; }
+}
+
+@keyframes splitRight {
+  to { transform: translate(calc(-50% + 65vw), -50%) rotate(12deg); opacity: 0; }
+}
+
+.magic-sparkle {
+  position: absolute;
+  z-index: 3;
+  color: white;
+  text-shadow: 0 0 8px #fff, 0 0 20px #ff8fce, 0 0 32px #c9a1ff;
+  pointer-events: none;
+  animation: sparkleFly 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes sparkleFly {
+  from { transform: translateY(10px) scale(.55) rotate(0); opacity: .25; }
+  to { transform: translateY(-16px) scale(1.4) rotate(35deg); opacity: 1; }
+}
+
+/* PORTAL AND LETTER PREVIEW */
+
+#portalScene {
+  background: #13091f;
+}
+
+#portalArtwork {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1);
+  will-change: transform;
+}
+
+/*
+  The portal artwork contains the decorative letter in its centre.
+  We zoom into that image, then reveal the real HTML letter.
+*/
+
+#portalScene.portal-zoom #portalArtwork {
+  animation: portalRush 1.1s cubic-bezier(.1,.8,.15,1) forwards;
+}
+
+@keyframes portalRush {
+  to { transform: scale(4.2); filter: brightness(1.25); }
 }
 
 @media (max-width: 600px) {
-  #quizScreen {
-    background-attachment: scroll;
-  }
+  #quizScreen { background-attachment: scroll; }
 }
 
 @media (max-width: 480px) {
@@ -1002,34 +990,49 @@ p {
     margin-bottom: 10px;
   }
 
-  #openingScreen .intro-goodluck {
-    margin-bottom: 12px;
-  }
-
+  #openingScreen .intro-goodluck { margin-bottom: 12px; }
   .loading-area { margin-top: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Keep the requested letter zoom available. */
-  .letter-zoom {
-    animation-duration: 1.15s !important;
-  }
+  .letter-zoom { animation-duration: 1.15s !important; }
+  .magic-sparkle, .heart-glow { animation-duration: 3s; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- NEW OPENING VIDEO SCREEN -->
+<!-- NEW MAGICAL TRANSITION OVERLAY -->
+<div id="magicTransition" aria-hidden="true">
+  <div id="heartScene">
+    <div class="heart-glow"></div>
+
+    <img id="heartLeft" class="heart-half" src="magic-heart.png" alt="">
+    <img id="heartRight" class="heart-half" src="magic-heart.png" alt="">
+
+    <span class="magic-sparkle" style="left:12%;top:20%">✦</span>
+    <span class="magic-sparkle" style="left:75%;top:16%;animation-delay:-.4s">✧</span>
+    <span class="magic-sparkle" style="left:22%;top:72%;animation-delay:-.8s">✦</span>
+    <span class="magic-sparkle" style="left:83%;top:68%;animation-delay:-.2s">✧</span>
+    <span class="magic-sparkle" style="left:48%;top:12%;animation-delay:-1s">✦</span>
+    <span class="magic-sparkle" style="left:56%;top:82%;animation-delay:-.6s">✧</span>
+  </div>
+
+  <div id="portalScene" class="hidden">
+    <img id="portalArtwork" src="magic-portal.png" alt="A magical portal with a love letter at its centre">
+
+    <span class="magic-sparkle" style="left:12%;top:20%">✦</span>
+    <span class="magic-sparkle" style="right:12%;top:25%;animation-delay:-.5s">✧</span>
+    <span class="magic-sparkle" style="left:20%;bottom:20%;animation-delay:-.8s">✦</span>
+    <span class="magic-sparkle" style="right:20%;bottom:18%;animation-delay:-.3s">✧</span>
+    <span class="magic-sparkle" style="left:48%;top:12%;animation-delay:-1s">✦</span>
+  </div>
+</div>
+
+<!-- OPENING VIDEO SCREEN -->
 <section class="screen active" id="openingScreen">
-  <video
-    id="introVideo"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
-    aria-hidden="true">
+  <video id="introVideo" autoplay muted loop playsinline preload="auto" aria-hidden="true">
     <source src="intro-video.mp4" type="video/mp4">
   </video>
 
@@ -1038,31 +1041,23 @@ p {
     <p class="intro-subtitle">Enter a world just for us</p>
     <p class="intro-goodluck">Goodluck</p>
 
-    <button id="startButton" class="start-button" type="button">
-      START
-    </button>
+    <button id="startButton" class="start-button" type="button">START</button>
 
     <div id="loadingArea" class="loading-area" aria-live="polite">
       <div id="loadingLabel" class="loading-label">LOADING...</div>
       <div id="loadingBars" class="loading-bars" aria-label="Loading progress">
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
-        <span class="loading-segment"></span>
+        <span class="loading-segment"></span><span class="loading-segment"></span>
+        <span class="loading-segment"></span><span class="loading-segment"></span>
+        <span class="loading-segment"></span><span class="loading-segment"></span>
+        <span class="loading-segment"></span><span class="loading-segment"></span>
+        <span class="loading-segment"></span><span class="loading-segment"></span>
+        <span class="loading-segment"></span><span class="loading-segment"></span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EXISTING TITLE SCREEN -->
+<!-- TITLE SCREEN -->
 <section class="screen" id="titleScreen">
   <img class="art" src="title-screen.png" alt="Cupid's Quest title artwork">
   <div class="shade"></div>
@@ -1082,16 +1077,13 @@ p {
   <img class="art game-art" src="game-scene.png" alt="Cupid's heart-catching game scene">
   <div class="shade"></div>
 
-  <canvas id="gameCanvas" tabindex="0"
-    aria-label="Tap the falling hearts to catch them"></canvas>
+  <canvas id="gameCanvas" tabindex="0" aria-label="Tap the falling hearts to catch them"></canvas>
 
   <div class="game-hud">
     <div class="heartsleft" id="heartProgress">♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡ ♡</div>
-
     <div class="hud-actions">
       <div class="score" id="scoreDisplay">💗 x 0</div>
-      <button class="pause" id="pauseButton" type="button"
-        onclick="togglePause()" aria-label="Pause game">Ⅱ</button>
+      <button class="pause" id="pauseButton" type="button" onclick="togglePause()" aria-label="Pause game">Ⅱ</button>
     </div>
   </div>
 
@@ -1164,9 +1156,7 @@ Ur always my brightest star in the sky baby 🥰🥰🥰🥰 and ill love u alwa
 
     <!-- MUSIC PLAYER -->
     <div class="audio-card">
-      <span class="audio-ribbon" aria-hidden="true">
-        <span class="ribbon-knot"></span>
-      </span>
+      <span class="audio-ribbon" aria-hidden="true"><span class="ribbon-knot"></span></span>
 
       <span class="float-heart" aria-hidden="true">♥</span>
       <span class="float-heart" aria-hidden="true">♡</span>
@@ -1210,15 +1200,13 @@ function showScreen(id) {
   if (target) target.classList.add("active");
 }
 
-/* OPENING VIDEO + START + LEFT-TO-RIGHT LOADING */
+/* OPENING VIDEO + START + LOADING */
 
 const introVideo = document.getElementById("introVideo");
 const startButton = document.getElementById("startButton");
 const loadingArea = document.getElementById("loadingArea");
 const loadingLabel = document.getElementById("loadingLabel");
-const loadingSegments = Array.from(
-  document.querySelectorAll(".loading-segment")
-);
+const loadingSegments = Array.from(document.querySelectorAll(".loading-segment"));
 
 let introStarted = false;
 let loadingTimer = null;
@@ -1232,7 +1220,6 @@ startButton.addEventListener("click", () => {
   loadingArea.classList.add("visible");
   loadingLabel.textContent = "LOADING...";
 
-  /* Try to start the video on devices that blocked autoplay. */
   introVideo.play().catch(() => {});
 
   let progress = 0;
@@ -1248,9 +1235,7 @@ startButton.addEventListener("click", () => {
       loadingTimer = null;
       loadingLabel.textContent = "READY";
 
-      setTimeout(() => {
-        showScreen("titleScreen");
-      }, 180);
+      setTimeout(() => showScreen("titleScreen"), 180);
     }
   }, 115);
 });
@@ -1274,7 +1259,6 @@ function startZoom() {
 
     const game = document.getElementById("gameScreen");
     game.classList.remove("game-enter");
-
     void game.offsetWidth;
     game.classList.add("game-enter");
 
@@ -1314,7 +1298,6 @@ function resizeCanvas() {
 
   canvas.width = Math.round(gameWidth * dpr);
   canvas.height = Math.round(gameHeight * dpr);
-
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   drawGame();
 }
@@ -1327,10 +1310,7 @@ window.addEventListener("orientationchange", () => {
 
 function makeHeart(x, y, speed, size) {
   return {
-    x,
-    y,
-    speed,
-    size,
+    x, y, speed, size,
     caught: false,
     rotation: (Math.random() - 0.5) * 0.24,
     wobble: Math.random() * Math.PI * 2,
@@ -1350,7 +1330,6 @@ function resetGame() {
   }
 
   gameSession++;
-
   score = 0;
   hearts = [];
   particles = [];
@@ -1369,14 +1348,7 @@ function resetGame() {
     const x = gameWidth * (0.12 + Math.random() * 0.76);
     const y = gameHeight * (0.12 + Math.random() * 0.58);
 
-    hearts.push(
-      makeHeart(
-        x,
-        y,
-        48 + Math.random() * 35,
-        29 + Math.random() * 9
-      )
-    );
+    hearts.push(makeHeart(x, y, 48 + Math.random() * 35, 29 + Math.random() * 9));
   }
 
   drawGame();
@@ -1402,9 +1374,7 @@ function drawHeart(x, y, size, rotation, color) {
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(rotation);
-
-  const s = size / 32;
-  ctx.scale(s, s);
+  ctx.scale(size / 32, size / 32);
 
   ctx.beginPath();
   ctx.moveTo(0, 10);
@@ -1425,11 +1395,8 @@ function drawGame() {
   ctx.clearRect(0, 0, gameWidth, gameHeight);
 
   const glow = ctx.createRadialGradient(
-    gameWidth / 2,
-    gameHeight / 2,
-    10,
-    gameWidth / 2,
-    gameHeight / 2,
+    gameWidth / 2, gameHeight / 2, 10,
+    gameWidth / 2, gameHeight / 2,
     Math.max(gameWidth, gameHeight) * 0.7
   );
 
@@ -1446,13 +1413,7 @@ function drawGame() {
     ctx.shadowColor = "#ff8bd5";
     ctx.shadowBlur = 17;
 
-    drawHeart(
-      heart.x,
-      heart.y,
-      heart.size,
-      heart.rotation,
-      "#ff8fce"
-    );
+    drawHeart(heart.x, heart.y, heart.size, heart.rotation, "#ff8fce");
 
     ctx.shadowBlur = 0;
     ctx.font = `bold ${Math.max(10, heart.size * 0.31)}px Trebuchet MS`;
@@ -1460,7 +1421,6 @@ function drawGame() {
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#ffffff";
     ctx.fillText("rika", heart.x, heart.y + heart.size * 0.05);
-
     ctx.restore();
   });
 
@@ -1484,8 +1444,7 @@ function addPopEffect(x, y) {
     const speed = 35 + Math.random() * 105;
 
     particles.push({
-      x,
-      y,
+      x, y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       life: 0.42 + Math.random() * 0.2,
@@ -1504,42 +1463,34 @@ function gameLoop(timestamp) {
   }
 
   if (!lastFrame) lastFrame = timestamp;
-
   const delta = Math.min((timestamp - lastFrame) / 1000, 0.035);
   lastFrame = timestamp;
 
   if (!paused) {
     spawnTimer += delta;
-
     const activeHearts = hearts.filter(heart => !heart.caught).length;
 
     if (spawnTimer >= 0.72 && activeHearts < 7) {
       spawnTimer = 0;
-
       const margin = Math.min(42, gameWidth * 0.1);
       const availableWidth = Math.max(1, gameWidth - margin * 2);
 
-      hearts.push(
-        makeHeart(
-          margin + Math.random() * availableWidth,
-          -35,
-          55 + Math.random() * 75,
-          29 + Math.random() * 10
-        )
-      );
+      hearts.push(makeHeart(
+        margin + Math.random() * availableWidth,
+        -35,
+        55 + Math.random() * 75,
+        29 + Math.random() * 10
+      ));
     }
 
     hearts.forEach(heart => {
       if (heart.caught) return;
-
       heart.y += heart.speed * delta;
       heart.wobble += heart.wobbleSpeed * delta;
       heart.x += Math.sin(heart.wobble) * 13 * delta;
     });
 
-    hearts = hearts.filter(heart =>
-      heart.caught || heart.y < gameHeight + 55
-    );
+    hearts = hearts.filter(heart => heart.caught || heart.y < gameHeight + 55);
 
     particles.forEach(particle => {
       particle.x += particle.vx * delta;
@@ -1549,7 +1500,6 @@ function gameLoop(timestamp) {
     });
 
     particles = particles.filter(particle => particle.life > 0);
-
     drawGame();
   }
 
@@ -1588,7 +1538,6 @@ function catchHeart(event) {
 
   chosen.caught = true;
   addPopEffect(chosen.x, chosen.y);
-
   score = Math.min(score + 1, TARGET_SCORE);
   updateHUD();
   drawGame();
@@ -1597,6 +1546,8 @@ function catchHeart(event) {
 }
 
 canvas.addEventListener("pointerdown", catchHeart, { passive: false });
+
+/* NEW: GAME FINISHES -> ZOOM INTO GLOWING HEART -> HEART SPLITS -> QUIZ */
 
 function finishGame() {
   if (!gameRunning) return;
@@ -1612,14 +1563,39 @@ function finishGame() {
   document.getElementById("pauseOverlay").style.display = "none";
 
   const thisSession = gameSession;
+  const overlay = document.getElementById("magicTransition");
+  const heartScene = document.getElementById("heartScene");
+  const portalScene = document.getElementById("portalScene");
+
+  overlay.classList.add("active");
+  overlay.setAttribute("aria-hidden", "false");
+
+  heartScene.classList.remove("heart-zoom", "heart-split", "hidden");
+  portalScene.classList.add("hidden");
+  portalScene.classList.remove("portal-zoom");
+
+  void heartScene.offsetWidth;
+  heartScene.classList.add("heart-zoom");
 
   finishTimer = setTimeout(() => {
     if (thisSession !== gameSession) return;
 
-    showScreen("quizScreen");
-    renderQuestion();
-    finishTimer = null;
-  }, 450);
+    heartScene.classList.remove("heart-zoom");
+    void heartScene.offsetWidth;
+    heartScene.classList.add("heart-split");
+
+    finishTimer = setTimeout(() => {
+      if (thisSession !== gameSession) return;
+
+      overlay.classList.remove("active");
+      overlay.setAttribute("aria-hidden", "true");
+      heartScene.classList.remove("heart-zoom", "heart-split");
+
+      showScreen("quizScreen");
+      renderQuestion();
+      finishTimer = null;
+    }, 1200);
+  }, 1100);
 }
 
 function togglePause() {
@@ -1627,12 +1603,8 @@ function togglePause() {
 
   paused = !paused;
 
-  document.getElementById("pauseOverlay").style.display =
-    paused ? "flex" : "none";
-
-  document.getElementById("pauseButton").textContent =
-    paused ? "▶" : "Ⅱ";
-
+  document.getElementById("pauseOverlay").style.display = paused ? "flex" : "none";
+  document.getElementById("pauseButton").textContent = paused ? "▶" : "Ⅱ";
   document.getElementById("pauseButton").setAttribute(
     "aria-label",
     paused ? "Resume game" : "Pause game"
@@ -1646,7 +1618,7 @@ function togglePause() {
 const questions = [
   {
     question: "do u love me",
-    options: ["Yes", "Yes", "So much"],
+    options: ["no", "Yes", "So much"],
     correct: 2
   },
   {
@@ -1661,12 +1633,12 @@ const questions = [
   },
   {
     question: "would u stay by my side no matter what happens",
-    options: ["Yes", "Yes", "Yes"],
+    options: ["Yes", "no stfu", "ew no"],
     correct: 0
   },
   {
     question: "would u love me no matter whathappens",
-    options: ["Yes", "Yes"],
+    options: ["Yes", "mudiyathu oombu"],
     correct: 0
   },
   {
@@ -1681,7 +1653,7 @@ const questions = [
   },
   {
     question: "wil u cuddle w me all my life",
-    options: ["Yesss😝", "Yess"],
+    options: ["Yesss😝", "podi punda"],
     correct: 0
   },
   {
@@ -1693,15 +1665,67 @@ const questions = [
 
 let questionIndex = 0;
 
+/*
+  NEW: QUIZ FINISHES -> PORTAL APPEARS -> ZOOM INTO ITS CENTRE
+  -> THE REAL LETTER FILLS THE SCREEN.
+  No extra transition runs after the real letter appears.
+*/
+
+let letterTransitionTimers = [];
+
+function clearLetterTransitionTimers() {
+  letterTransitionTimers.forEach(timer => clearTimeout(timer));
+  letterTransitionTimers = [];
+}
+
 function openLetterWithSuperZoom() {
+  clearLetterTransitionTimers();
+
+  const overlay = document.getElementById("magicTransition");
+  const heartScene = document.getElementById("heartScene");
+  const portalScene = document.getElementById("portalScene");
+  const portalArtwork = document.getElementById("portalArtwork");
   const letterScreen = document.getElementById("letterScreen");
 
-  /* Reset the animation so it plays whenever the letter is opened. */
-  letterScreen.classList.remove("letter-zoom");
-  showScreen("letterScreen");
+  overlay.classList.add("active");
+  overlay.setAttribute("aria-hidden", "false");
 
-  void letterScreen.offsetWidth;
-  letterScreen.classList.add("letter-zoom");
+  heartScene.classList.add("hidden");
+  heartScene.classList.remove("heart-zoom", "heart-split");
+
+  portalScene.classList.remove("hidden");
+  portalScene.classList.remove("portal-zoom");
+
+  portalArtwork.style.transform = "scale(1)";
+  portalArtwork.style.filter = "brightness(1)";
+
+  /* Keep the real letter hidden behind the transition until the zoom ends. */
+  letterScreen.classList.remove("active", "letter-zoom");
+
+  void portalScene.offsetWidth;
+
+  /* Let the magical portal appear briefly before zooming into its letter. */
+  letterTransitionTimers.push(setTimeout(() => {
+    portalScene.classList.add("portal-zoom");
+  }, 1000));
+
+  /* Reveal the actual letter as the portal zoom finishes. */
+  letterTransitionTimers.push(setTimeout(() => {
+    overlay.classList.remove("active");
+    overlay.setAttribute("aria-hidden", "true");
+
+    portalScene.classList.add("hidden");
+    portalScene.classList.remove("portal-zoom");
+    heartScene.classList.remove("hidden", "heart-zoom", "heart-split");
+
+    showScreen("letterScreen");
+
+    letterScreen.classList.remove("letter-zoom");
+    void letterScreen.offsetWidth;
+    letterScreen.classList.add("letter-zoom");
+
+    letterTransitionTimers = [];
+  }, 2150));
 }
 
 function renderQuestion() {
@@ -1715,19 +1739,16 @@ function renderQuestion() {
   document.getElementById("questionNumber").textContent =
     `QUESTION ${questionIndex + 1} OF ${questions.length}`;
 
-  document.getElementById("questionText").textContent =
-    question.question;
+  document.getElementById("questionText").textContent = question.question;
 
   const optionsBox = document.getElementById("answerOptions");
   optionsBox.replaceChildren();
 
   question.options.forEach((option, index) => {
     const button = document.createElement("button");
-
     button.type = "button";
     button.textContent = option;
     button.addEventListener("click", () => checkAnswer(index));
-
     optionsBox.appendChild(button);
   });
 }
